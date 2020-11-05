@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core';
 import { SportsEsports} from '@material-ui/icons'
-
+import axios from 'axios';
 
 const styles = theme => ({
     margin: {
@@ -12,17 +12,19 @@ const styles = theme => ({
     }
 });
 
+var value = ""
 
 class Homepage extends Component {
 
+    handleOnChange = event => {
+        value = event.target.value
+      };
+
     buttonClicked(){
-        console.log("Im clicked XD ", this.textValue)
+        console.log("Im clicked XD ", value)
+
+        axios.post("http://127.0.0.1:8000/api/commands/", { "command" : value})
     }
-
-    setTextValue = (event) => {
-        this.setState({textValue: event.target.value});
-
-      }
 
     render() {
         const { classes } = this.props;
@@ -34,7 +36,7 @@ class Homepage extends Component {
                             <SportsEsports />
                         </Grid>
                         <Grid item md={true} sm={true} xs={true}>
-                            <TextField onChange={this.setTextvalue}id="kmr" label="Enter a KMR Command" type="string" fullWidth autoFocus/>
+                            <TextField onChange={this.handleOnChange} id="kmr" type="string" fullWidth autoFocus/>
                         </Grid>
                     </Grid>
                     <Grid container alignItems="center" justify="space-between">

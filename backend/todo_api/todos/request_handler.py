@@ -11,7 +11,10 @@ class RequestMiddleware:
 
         response = self.get_response(request)
         
-        print(response.data['command'])
+        try:
+            print(response.data['command'])
+        except AttributeError:
+            pass
         # Code to be executed for each request/response after
         # the view is called.
 
