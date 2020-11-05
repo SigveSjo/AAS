@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core';
+import React, { Component, useState } from 'react'
+import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core'
 import { SportsEsports} from '@material-ui/icons'
-import axios from 'axios';
+import axios from 'axios'
 
 const styles = theme => ({
     margin: {
@@ -10,44 +10,42 @@ const styles = theme => ({
     padding: {
         padding: theme.spacing(1)
     }
-});
+})
 
-var value = ""
 
-class Homepage extends Component {
+function Homepage(props) {
+    const [value, setValue] = useState("")
 
-    handleOnChange = event => {
-        value = event.target.value
-      };
+    const handleOnChange = (event) => {
+        setValue(event.target.value)
+    }
 
-    buttonClicked(){
+    const buttonClicked = () =>{
         console.log("Im clicked XD ", value)
 
         axios.post("http://127.0.0.1:8000/api/commands/", { "command" : value})
     }
 
-    render() {
-        const { classes } = this.props;
-        return (
-            <Paper className={classes.padding}>
-                <div className={classes.margin}>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
-                            <SportsEsports />
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField onChange={this.handleOnChange} id="kmr" type="string" fullWidth autoFocus/>
-                        </Grid>
+    const { classes } = props
+    return (
+        <Paper className={classes.padding}>
+            <div className={classes.margin}>
+                <Grid container spacing={8} alignItems="flex-end">
+                    <Grid item>
+                        <SportsEsports />
                     </Grid>
-                    <Grid container alignItems="center" justify="space-between">
+                    <Grid item md={true} sm={true} xs={true}>
+                        <TextField onChange={handleOnChange} id="kmr" type="string" fullWidth autoFocus/>
                     </Grid>
-                    <Grid container justify="center" style={{ marginTop: '10px' }}>
-                        <Button onClick={this.buttonClicked} variant="outlined" color="primary" style={{ textTransform: "none" }}>Send</Button>
-                    </Grid>
-                </div>
-            </Paper>
-        );
-    }
+                </Grid>
+                <Grid container alignItems="center" justify="space-between">
+                </Grid>
+                <Grid container justify="center" style={{ marginTop: '10px' }}>
+                    <Button onClick={buttonClicked} variant="outlined" color="primary" style={{ textTransform: "none" }}>Send</Button>
+                </Grid>
+            </div>
+        </Paper>
+    )
 }
 
 export default withStyles(styles)(Homepage)
