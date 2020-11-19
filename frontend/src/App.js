@@ -1,6 +1,7 @@
 // App.js
 import React, { Component } from 'react';
 import Homepage from './components/homepage'
+import KMPController from './components/kmpController'
 
 import { Grid } from '@material-ui/core';
 
@@ -35,7 +36,10 @@ class App extends Component {
             <Homepage/>
           </Grid>
           <Grid>
-            <></>
+            <div> <hr/> </div>
+          </Grid>
+          <Grid>
+            <KMPController/>
           </Grid>
         </Grid>  
       </div>
