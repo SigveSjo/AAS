@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core';
-import { SportsEsports } from '@material-ui/icons'
-import axios from 'axios';
+import React, { useState } from 'react'
+import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core'
+import { SportsEsports} from '@material-ui/icons'
+import axios from 'axios'
 
 const styles = theme => ({
     margin: {
@@ -13,44 +13,42 @@ const styles = theme => ({
 });
 const API_URL = "http://127.0.0.1:8000/api/commands/"
 
-var value = ""
 
-class Homepage extends Component {
+function Homepage(props) {
+    const [value, setValue] = useState("")
 
-    handleOnChange = event => {
-        value = event.target.value
-      };
+    const handleOnChange = (event) => {
+        setValue(event.target.value)
+    }
 
-    buttonClicked(){
-        console.log("Command sent!", value)
+    const buttonClicked = () =>{
+        console.log("Command sent", value)
 
         axios.post(API_URL, { "command" : value})
 
         console.log(Date.now());
     }
 
-    render() {
-        const { classes } = this.props;
-        return (
-            <Paper className={classes.padding}>
-                <div className={classes.margin}>
-                    <Grid container spacing={8} alignItems="flex-end">
-                        <Grid item>
-                            <SportsEsports />
-                        </Grid>
-                        <Grid item md={true} sm={true} xs={true}>
-                            <TextField onChange={this.handleOnChange} id="kmr" type="string" fullWidth autoFocus label="General command"/>
-                        </Grid>
+    const { classes } = props
+    return (
+        <Paper className={classes.padding}>
+            <div className={classes.margin}>
+                <Grid container spacing={8} alignItems="flex-end">
+                    <Grid item>
+                        <SportsEsports />
                     </Grid>
-                    <Grid container alignItems="center" justify="space-between">
+                    <Grid item md={true} sm={true} xs={true}>
+                        <TextField onChange={handleOnChange} id="kmr" type="string" fullWidth autoFocus/>
                     </Grid>
-                    <Grid container justify="center" style={{ marginTop: '10px' }}>
-                        <Button onClick={this.buttonClicked} variant="outlined" color="primary" style={{ textTransform: "none" }}>Send</Button>
-                    </Grid>
-                </div>
-            </Paper>
-        );
-    }
+                </Grid>
+                <Grid container alignItems="center" justify="space-between">
+                </Grid>
+                <Grid container justify="center" style={{ marginTop: '10px' }}>
+                    <Button onClick={buttonClicked} variant="outlined" color="primary" style={{ textTransform: "none" }}>Send</Button>
+                </Grid>
+            </div>
+        </Paper>
+    )
 }
 
 export default withStyles(styles)(Homepage)
