@@ -1,48 +1,21 @@
 // App.js
 import React, { Component } from 'react';
-import Homepage from './components/homepage'
-import KMPController from './components/kmpController'
+import DenseAppBar from './components/appbar'
+import Entity from './components/entity'
+import { Grid, Button } from '@material-ui/core';
+import history from './history'
 
-import { Grid } from '@material-ui/core';
 
 class App extends Component {
-  state = {
-    todos: []
-  };
-/* 
-   This is where the magic happens
-   async componentDidMount() {
-     try {
-       const res = await fetch('http://127.0.0.1:8000/api/'); // fetching the data from api, before the page loaded
-       const todos = await res.json();
-       this.setState({
-         todos
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    */
-    
+
   render() {
     return (
-      <div>
-        
-        <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
-          <Grid>
-            <></>
-          </Grid>
-          <Grid>
-            <Homepage/>
-          </Grid>
-          <Grid>
-            <div> <hr/> </div>
-          </Grid>
-          <Grid>
-            <KMPController/>
-          </Grid>
-        </Grid>  
-      </div>
+            <div style={{background: '#fbfbfb'}}>
+            <DenseAppBar />
+              <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
+                <Button onClick={() => history.push('/kmr')} ><Entity /></Button>
+              </Grid>  
+            </div>
       );
   }
 }

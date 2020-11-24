@@ -54,7 +54,7 @@ function KMPController(props) {
 
     return (
         <Paper className={classes.padding}>
-            <Grid container alignItems="center" justify="space-between">
+            <Grid container justify="center">
                 <div> KMP Controller </div>
             </Grid>
             <div className={classes.margin}>
@@ -63,6 +63,7 @@ function KMPController(props) {
                 step={0.1}
                 min={0.0}
                 max={1.0}
+                marks
                 valueLabelDisplay="auto"
                 onChange={handleOnChangeSpeed}
                 />

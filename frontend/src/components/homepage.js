@@ -33,12 +33,15 @@ function Homepage(props) {
     return (
         <Paper className={classes.padding}>
             <div className={classes.margin}>
+                <Grid container justify="center">
+                    <div> KMR General Commands </div>
+                </Grid>
                 <Grid container spacing={8} alignItems="flex-end">
                     <Grid item>
                         <SportsEsports />
                     </Grid>
                     <Grid item md={true} sm={true} xs={true}>
-                        <TextField onChange={handleOnChange} id="kmr" type="string" fullWidth autoFocus/>
+                        <TextField onChange={handleOnChange} id="kmr" type="string" fullWidth autoFocus label="KMR iiwa command"/>
                     </Grid>
                 </Grid>
                 <Grid container alignItems="center" justify="space-between">
