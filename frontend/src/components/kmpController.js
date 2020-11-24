@@ -37,10 +37,10 @@ function KMPController(props) {
             vector = " 0 -1 0"
         }
         if(direction === "clockwise"){
-            vector = " 0 0 1"
+            vector = " 0 0 -1"
         }
         if(direction === "counter-clockwise"){
-            vector = " 0 0 -1"
+            vector = " 0 0 1"
         }
         if(direction === "stop"){
             vector = " 0 0 0"
