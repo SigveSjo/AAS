@@ -1,6 +1,6 @@
 // App.js
 import React, { Component } from 'react';
-import Homepage from './components/homepage'
+import KMRGeneralCommands from './components/kmrGeneralCommands'
 import KMPController from './components/kmpController'
 import DenseAppBar from './components/appbar_entity'
 import LBRController from './components/lbrController'
@@ -17,7 +17,7 @@ class KMR extends Component {
         <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh'}}>
           <Grid container justify="center" style={{ marginTop: '10px' }}>
             <Grid style={{ marginTop: '15vh', padding: '20px'}}>
-              <Homepage/>
+              <KMRGeneralCommands/>
             </Grid>
             <Grid style={{ marginTop: '10vh', paddingRight: '20px'}}>
               <KMPController/>

@@ -14,7 +14,7 @@ const styles = theme => ({
 const API_URL = "http://127.0.0.1:8000/api/commands/"
 
 
-function Homepage(props) {
+function KMRGeneralCommands(props) {
     const [value, setValue] = useState("")
 
     const handleOnChange = (event) => {
@@ -54,4 +54,4 @@ function Homepage(props) {
     )
 }
 
-export default withStyles(styles)(Homepage)
+export default withStyles(styles)(KMRGeneralCommands)
