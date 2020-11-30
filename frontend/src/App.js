@@ -10,13 +10,15 @@ class App extends Component {
 
   render() {
     return (
-            <div style={{background: '#fbfbfb'}}>
-            <DenseAppBar />
-              <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
-                <Button onClick={() => history.push('/kmr')} ><Entity /></Button>
-              </Grid>  
-            </div>
-      );
+      <div style={{background: '#fbfbfb'}}>
+        <DenseAppBar />
+        <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
+          <Button onClick={() => history.push('/kmr')} >
+            <Entity />
+          </Button>
+        </Grid>  
+      </div>
+    );
   }
 }
 

@@ -3,6 +3,7 @@ import { Paper, withStyles, Grid, Button, Slider } from '@material-ui/core';
 import { Add, Remove } from '@material-ui/icons'
 import axios from 'axios';
 import lbr_image from '../resources/images/lbr.png'
+import configs from '../config.json'
 
 const styles = theme => ({
     margin: {
@@ -15,12 +16,12 @@ const styles = theme => ({
         margin: theme.spacing(1.5)
     }
 });
-const API_URL = "http://127.0.0.1:8000/api/commands/"
+//const API_URL = "http://127.0.0.1:8000/api/commands/"
 
 function LBRController(props) {
 
-    const moveLBR = (joint, direction) => { 
-        axios.post(API_URL, { "command" : "lbr:" + joint + " " + direction})
+    const moveLBR = (joint, direction) => {
+        axios.post(configs.API_URL, { "command" : "lbr:" + joint + " " + direction})
     }
      
     const { classes } = props;

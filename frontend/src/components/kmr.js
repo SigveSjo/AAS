@@ -1,9 +1,9 @@
 // App.js
 import React, { Component } from 'react';
-import KMRGeneralCommands from './components/kmrGeneralCommands'
-import KMPController from './components/kmpController'
-import DenseAppBar from './components/appbar_entity'
-import LBRController from './components/lbrController'
+import KMRGeneralCommands from './kmrGeneralCommands'
+import KMPController from './kmpController'
+import DenseAppBar from './appbarEntity'
+import LBRController from './lbrController'
 
 import { Grid } from '@material-ui/core';
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Paper, withStyles, Grid, Button, Slider } from '@material-ui/core';
 import { ArrowUpwardRounded, ArrowDownwardRounded, ArrowBack, ArrowForward, RotateLeft, RotateRight} from '@material-ui/icons'
 import axios from 'axios';
+import Configs from '../config.json'
 
 const styles = theme => ({
     margin: {
@@ -11,7 +12,7 @@ const styles = theme => ({
         padding: theme.spacing(1)
     }
 });
-const API_URL = "http://127.0.0.1:8000/api/commands/"
+//const API_URL = "http://127.0.0.1:8000/api/commands/"
 
 function KMPController(props) {
 
@@ -46,7 +47,7 @@ function KMPController(props) {
             vector = " 0 0 0"
         }
         
-        axios.post(API_URL, { "command" : "kmp:" + speed + vector})
+        axios.post(Configs.API_URL, { "command" : "kmp:" + speed + vector})
     }
 
      

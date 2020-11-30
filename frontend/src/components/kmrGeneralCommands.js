@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core'
 import { SportsEsports} from '@material-ui/icons'
 import axios from 'axios'
+import configs from '../config.json'
 
 const styles = theme => ({
     margin: {
@@ -11,7 +12,7 @@ const styles = theme => ({
         padding: theme.spacing(1)
     }
 });
-const API_URL = "http://127.0.0.1:8000/api/commands/"
+//const API_URL = "http://127.0.0.1:8000/api/commands/"
 
 
 function KMRGeneralCommands(props) {
@@ -24,7 +25,7 @@ function KMRGeneralCommands(props) {
     const buttonClicked = () =>{
         console.log("Command sent", value)
 
-        axios.post(API_URL, { "command" : value})
+        axios.post(configs.API_URL, { "command" : value})
 
         console.log(Date.now());
     }
