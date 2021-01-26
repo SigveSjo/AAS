@@ -2,7 +2,7 @@ import sys
 sys.path.insert(0, "..")
 import logging
 
-from opcua import ua, Server
+from opcua import ua, Server, uamethod
 
 class RequestMiddleware:
     def __init__(self, get_response):
@@ -36,14 +36,18 @@ class RequestMiddleware:
 
         return response
 
+    @uamethod
+    def update_status(self, parent, msg):
+        print(msg)
+
     def main(self):
         logging.basicConfig(level=logging.WARN)
         logger = logging.getLogger("opcua.server.internal_subscription")
         #logger.setLevel(logging.DEBUG)
 
-        # setup our server
+        # setup our server with IP of the computer running the internal_interface
         server = Server()
-        server.set_endpoint("opc.tcp://0.0.0.0:4840/freeopcua/server/")
+        server.set_endpoint("opc.tcp://10.22.25.161:4840/freeopcua/server/")
 
         # setup our own namespace, not really necessary but should as spec
         uri = "OPCUA_AAS_COMMUNICATION_SERVER"
@@ -54,6 +58,8 @@ class RequestMiddleware:
 
         # populating our address space
         myobj = objects.add_object(idx, "MyObject")
+        status_node = myobj.add_method(idx, "update_status", self.update_status, [ua.VariantType.String], [ua.VariantType.Int64])
+        print(status_node)
         
         lbrEvent = server.create_custom_event_type(idx, 'LBREvent')
         kmpEvent = server.create_custom_event_type(idx, 'KMPEvent')
