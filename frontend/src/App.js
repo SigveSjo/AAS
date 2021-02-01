@@ -1,8 +1,8 @@
 // App.js
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import DenseAppBar from './components/appbar'
 import Entity from './components/entity'
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core'
 import history from './history'
 
 
@@ -18,8 +18,8 @@ class App extends Component {
           </Button>
         </Grid>  
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App

@@ -1,8 +1,13 @@
 import sys
 sys.path.insert(0, "..")
 import logging
+import asyncio
 
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync, sync_to_async
 from opcua import ua, Server, uamethod
+from .models import Robot
+
 
 class RequestMiddleware:
     def __init__(self, get_response):
@@ -30,15 +35,33 @@ class RequestMiddleware:
                 self.kmpEvgen.trigger()
                 print("KMPEvent sent!")
 
-
-        except AttributeError:
+        except (KeyError, AttributeError) as e:
             pass
 
         return response
 
     @uamethod
     def update_status(self, parent, msg):
-        print(msg)
+        loop = asyncio.get_running_loop()
+        loop.create_task(self.update_database(msg))
+        loop.create_task(self.send_async(str("updated")))
+
+    async def update_database(self, msg):
+        rid, component, component_status = msg.split(':')
+        obj, created = await sync_to_async(Robot.objects.update_or_create)(
+            robot_id=rid,
+            defaults={component: component_status}
+        )
+
+    async def send_async(self, msg):
+        channel_layer = get_channel_layer()
+        await channel_layer.group_send(
+            'status_update',
+            {
+                'type': 'send_to_aas',
+                'message': msg
+            }
+        )     
 
     def main(self):
         logging.basicConfig(level=logging.WARN)

@@ -12,7 +12,8 @@ const styles = theme => ({
         padding: theme.spacing(1)
     }
 });
-//const API_URL = "http://127.0.0.1:8000/api/commands/"
+
+const API_URL = configs.API_URL + "commands/"
 
 
 function KMRGeneralCommands(props) {
@@ -25,7 +26,7 @@ function KMRGeneralCommands(props) {
     const buttonClicked = () =>{
         console.log("Command sent", value)
 
-        axios.post(configs.API_URL, { "command" : value})
+        axios.post(API_URL, { "command" : value})
 
         console.log(Date.now());
     }

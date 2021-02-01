@@ -16,12 +16,12 @@ const styles = theme => ({
         margin: theme.spacing(1.5)
     }
 });
-//const API_URL = "http://127.0.0.1:8000/api/commands/"
+const API_URL = configs.API_URL + "commands/"
 
 function LBRController(props) {
 
     const moveLBR = (joint, direction) => {
-        axios.post(configs.API_URL, { "command" : "lbr:" + joint + " " + direction})
+        axios.post(API_URL, { "command" : "lbr:" + joint + " " + direction})
     }
      
     const { classes } = props;

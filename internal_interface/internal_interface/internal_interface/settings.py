@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'corsheaders',
     'rest_framework',
-    'aas_api'
+    'aas_api',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +73,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'internal_interface.wsgi.application'
+#WSGI_APPLICATION = 'internal_interface.wsgi.application'
 
 CORS_ORIGIN_WHITELIST = (
 'http://localhost:3000',
@@ -85,6 +86,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+"""
+    InMemoryChannelLayerShould only be used for testing/local development. 
+    For production use channels-redis.
+"""
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
 
@@ -126,3 +137,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Channels
+ASGI_APPLICATION = 'internal_interface.asgi.application'
