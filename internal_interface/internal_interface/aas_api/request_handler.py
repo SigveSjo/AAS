@@ -47,10 +47,11 @@ class RequestMiddleware:
         loop.create_task(self.send_async(str("updated")))
 
     async def update_database(self, msg):
-        rid, component, component_status = msg.split(':')
+        rid, robot, component, component_status = msg.split(':')
+        print(component, bool(int(component_status)))
         obj, created = await sync_to_async(Robot.objects.update_or_create)(
-            robot_id=rid,
-            defaults={component: component_status}
+            id=rid, name=robot,
+            defaults={component: bool(int(component_status))}
         )
 
     async def send_async(self, msg):

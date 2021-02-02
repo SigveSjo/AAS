@@ -14,7 +14,6 @@ class RobotSerializer(serializers.ModelSerializer):
     class Meta:
         fields = (
             'id',
-            'robot_id',
             'name',
             'lbr',
             'kmp',
