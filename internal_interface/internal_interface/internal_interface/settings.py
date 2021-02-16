@@ -77,6 +77,7 @@ TEMPLATES = [
 
 CORS_ORIGIN_WHITELIST = (
 'http://andrcar-master.ivt.ntnu.no:3000',
+'http://localhost:3000',
 )
 
 # Database

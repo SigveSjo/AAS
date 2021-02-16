@@ -10,6 +10,7 @@ django = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
 opcua = "*"
+channels = "*"
 
 [requires]
 python_version = "3.8"
