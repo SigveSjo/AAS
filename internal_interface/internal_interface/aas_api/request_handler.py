@@ -71,7 +71,7 @@ class RequestMiddleware:
 
         # setup our server with IP of the computer running the internal_interface
         server = Server()
-        server.set_endpoint("opc.tcp://10.22.25.161:4840/freeopcua/server/")
+        server.set_endpoint("opc.tcp://andrcar-master.ivt.ntnu.no:4841/freeopcua/server/")
 
         # setup our own namespace, not really necessary but should as spec
         uri = "OPCUA_AAS_COMMUNICATION_SERVER"
