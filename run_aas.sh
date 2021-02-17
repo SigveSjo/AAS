@@ -11,5 +11,5 @@ sudo cat config.json | jq '.OPCUA_URL = $v' --arg v $opcua_ip | sponge config.js
 sudo cat frontend/src/config.json | jq '.API_URL = $v' --arg v $api | sponge frontend/src/config.json
 sudo cat frontend/src/config.json | jq '.WS_URL = $v' --arg v $ws | sponge frontend/src/config.json
 
-gnome-terminal -- python3 internal_interface/internal_interface/manage.py runserver $internal_interface_ip
+gnome-terminal -- python3.8 internal_interface/internal_interface/manage.py runserver $internal_interface_ip
 ( cd frontend && gnome-terminal -- npm run start HOST=$frontend_ip )
