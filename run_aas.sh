@@ -11,5 +11,5 @@ sudo cat internal_interface/internal_interface/config.json | jq '.OPCUA_URL = $v
 sudo cat frontend/src/config.json | jq '.API_URL = $v' --arg v $api | sponge frontend/src/config.json
 sudo cat frontend/src/config.json | jq '.WS_URL = $v' --arg v $ws | sponge frontend/src/config.json
 
-( cd internal_interface/internal_interface && gnome-terminal -- python3.8 manage.py runserver $internal_interface_ip )
+( cd internal_interface/internal_interface && gnome-terminal -- python3 manage.py runserver $internal_interface_ip )
 ( cd frontend && gnome-terminal -- npm run start HOST=$frontend_ip )
