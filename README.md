@@ -1,8 +1,8 @@
 # Asset Admistration Shell
 
 ## Internal Interface
-1.cd internal_interface
-2.pip3 install -r requirements.txt
+1. cd internal_interface
+2. pip3 install -r requirements.txt
 
 ## External Interface
 1. cd frontend
