@@ -22,13 +22,13 @@ function Entity(props) {
 
     useEffect(() => {
         // TODO: implement fetching of KMR status
-        axios.get(configs.API_URL + "robots/", { "command" : ""})
+        /*axios.get(configs.API_URL + "robots/", { "command" : ""})
             .catch(error => {
                 if(error.message == "Network Error"){
                     setStatus("offline")
                 }
             })
-    });
+        */});
 
     const connectionOpened = () => console.log("Socket connection opened");
 

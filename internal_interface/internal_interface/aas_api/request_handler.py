@@ -7,6 +7,7 @@ from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync, sync_to_async
 from opcua import ua, Server, uamethod
 from .models import Robot
+import json
 
 
 class RequestMiddleware:
@@ -70,8 +71,12 @@ class RequestMiddleware:
         #logger.setLevel(logging.DEBUG)
 
         # setup our server with IP of the computer running the internal_interface
+
+        with open("config.json", "r") as f:
+            ip_dict = json.load(f)
+
         server = Server()
-        server.set_endpoint("opc.tcp://10.22.25.161:4840/freeopcua/server/")
+        server.set_endpoint("opc.tcp://" + ip_dict["OPCUA_URL"] + "/freeopcua/server/")
 
         # setup our own namespace, not really necessary but should as spec
         uri = "OPCUA_AAS_COMMUNICATION_SERVER"

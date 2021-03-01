@@ -25,7 +25,7 @@ SECRET_KEY = '!@%lj3y9%vpy!d%_bine7i*dguy-t*+0ssmm%0n257em5yr1a5'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -76,6 +76,7 @@ TEMPLATES = [
 #WSGI_APPLICATION = 'internal_interface.wsgi.application'
 
 CORS_ORIGIN_WHITELIST = (
+'http://andrcar-master.ivt.ntnu.no:3000',
 'http://localhost:3000',
 )
 
