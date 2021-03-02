@@ -8,6 +8,7 @@
 1. ```$ cd frontend```
 2. ```$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash```
 3. ```$ nvm install node --lts```
+4. ```$ npm install```
 
 ## Launch
 ```$ sh run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841```
