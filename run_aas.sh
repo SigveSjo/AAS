@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#E.g for local: sh run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841
+#E.g for local: bash run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841
 
 frontend_ip=$1
 internal_interface_ip=$2

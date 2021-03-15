@@ -45,7 +45,7 @@ class RequestMiddleware:
     def update_status(self, parent, msg):
         loop = asyncio.get_running_loop()
         loop.create_task(self.update_database(msg))
-        loop.create_task(self.send_async(str("updated")))
+        loop.create_task(self.send_async(msg))
 
     async def update_database(self, msg):
         rid, robot, component, component_status = msg.split(':')
@@ -56,12 +56,17 @@ class RequestMiddleware:
         )
 
     async def send_async(self, msg):
+        rid, robot, component, component_status = msg.split(':')
+
         channel_layer = get_channel_layer()
         await channel_layer.group_send(
             'status_update',
             {
                 'type': 'send_to_aas',
-                'message': msg
+                'rid' : rid,
+                'robot' : robot,
+                'component' : component,
+                'component_status' : str(bool(int(component_status)))
             }
         )     
 

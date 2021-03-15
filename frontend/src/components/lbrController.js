@@ -16,13 +16,18 @@ const styles = theme => ({
         margin: theme.spacing(1.5)
     }
 });
-const API_URL = configs.API_URL + "commands/"
 
 function LBRController(props) {
 
     const moveLBR = (joint, direction) => {
-        axios.post(API_URL, { "command" : "lbr:" + joint + " " + direction})
+        axios.post(configs.API_URL + "commands/", { "command" : "lbr:" + joint + " " + direction})
     }
+
+    const [enabled, setEnabled] = useState(false)
+
+    axios.get(configs.API_URL + "robots/1").then(resp => {
+        setEnabled(resp.data.lbr)
+    });
      
     const { classes } = props;
 
@@ -37,42 +42,42 @@ function LBRController(props) {
                 </Grid>
                 <Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveLBR('A7','0')} onMouseDown ={() => moveLBR('A7',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A7','0')} onMouseDown ={() => moveLBR('A7',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A7','0')} onMouseDown ={() => moveLBR('A7',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A7','0')} onMouseDown ={() => moveLBR('A7',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveLBR('A6','0')} onMouseDown ={() => moveLBR('A6',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A6','0')} onMouseDown ={() => moveLBR('A6',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A6','0')} onMouseDown ={() => moveLBR('A6',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A6','0')} onMouseDown ={() => moveLBR('A6',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveLBR('A5','0')} onMouseDown ={() => moveLBR('A5',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A5','0')} onMouseDown ={() => moveLBR('A5',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A5','0')} onMouseDown ={() => moveLBR('A5',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A5','0')} onMouseDown ={() => moveLBR('A5',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveLBR('A4','0')} onMouseDown ={() => moveLBR('A4',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A4','0')} onMouseDown ={() => moveLBR('A4',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A4','0')} onMouseDown ={() => moveLBR('A4',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A4','0')} onMouseDown ={() => moveLBR('A4',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveLBR('A3','0')} onMouseDown ={() => moveLBR('A3',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A3','0')} onMouseDown ={() => moveLBR('A3',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A3','0')} onMouseDown ={() => moveLBR('A3',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A3','0')} onMouseDown ={() => moveLBR('A3',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid>
-                         <Button onMouseUp ={() => moveLBR('A2','0')} onMouseDown ={() => moveLBR('A2',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A2','0')} onMouseDown ={() => moveLBR('A2',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A2','0')} onMouseDown ={() => moveLBR('A2',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A2','0')} onMouseDown ={() => moveLBR('A2',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveLBR('A1','0')} onMouseDown ={() => moveLBR('A1',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
-                        <Button onMouseUp ={() => moveLBR('A1','0')} onMouseDown ={() => moveLBR('A1',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
+                        <Button disabled={!enabled}onMouseUp ={() => moveLBR('A1','0')} onMouseDown ={() => moveLBR('A1',"-1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Remove /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveLBR('A1','0')} onMouseDown ={() => moveLBR('A1',"1")} variant="outlined" color="primary" style={{ textTransform: "none" }}><Add /></Button>
                         <hr/>
                     </Grid>
                     <Grid container justify="center">
-                        <Button onClick = {() => moveLBR('A9', '1')} variant="outlined" color="primary" style={{ textTransform: "none" }}>Drive</Button>
+                        <Button disabled={!enabled} onClick = {() => moveLBR('A9', '1')} variant="outlined" color="primary" style={{ textTransform: "none" }}>Drive</Button>
                     </Grid>
                 </Grid>
             </Grid>

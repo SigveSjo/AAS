@@ -29,7 +29,14 @@ class UpdateConsumer(WebsocketConsumer):
 
     def send_to_aas(self, event):
         print("Send_to_aas called")
-        message = event['message']
+        
+        rid = event['rid']
+        robot = event['robot']
+        component = event['component']
+        component_status = event['component_status']
         self.send(text_data=json.dumps({
-            'message': message
+            'rid' : rid,
+            'robot' : robot,
+            'component' : component,
+            'component_status' : component_status
         }))

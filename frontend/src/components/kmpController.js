@@ -12,11 +12,15 @@ const styles = theme => ({
         padding: theme.spacing(1)
     }
 });
-const API_URL = configs.API_URL + "commands/"
 
 function KMPController(props) {
 
     const [speed, setSpeed] = useState(0.1)
+    const [enabled, setEnabled] = useState(false)
+
+    axios.get(configs.API_URL + "robots/1").then(resp => {
+        setEnabled(resp.data.kmp)
+    });
 
     const handleOnChangeSpeed = (event, newValue) => {
         setSpeed(newValue)
@@ -47,7 +51,7 @@ function KMPController(props) {
             vector = " 0 0 0"
         }
         
-        axios.post(API_URL, { "command" : "kmp:" + speed + vector})
+        axios.post(configs.API_URL + "commands/", { "command" : "kmp:" + speed + vector})
     }
 
      
@@ -58,7 +62,7 @@ function KMPController(props) {
             <Grid container justify="center">
                 <div> KMP Controller </div>
             </Grid>
-            <div className={classes.margin}>
+            <div className={classes.margin} >
                 Speed <Slider
                 defaultValue={0.1}
                 step={0.1}
@@ -67,27 +71,28 @@ function KMPController(props) {
                 marks
                 valueLabelDisplay="auto"
                 onChange={handleOnChangeSpeed}
+                disabled={!enabled} 
                 />
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
-                    <Button onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('up')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowUpwardRounded /></Button>
+                    <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('up')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowUpwardRounded /></Button>
                 </Grid>
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
                     <Grid>
-                        <Button onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('left')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowBack /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('left')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowBack /></Button>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('down')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowDownwardRounded /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('down')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowDownwardRounded /></Button>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('right')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowForward/></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('right')} variant="outlined" color="primary" style={{ textTransform: "none" }}><ArrowForward/></Button>
                     </Grid>
                 </Grid>
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
                     <Grid>
-                        <Button onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('counter-clockwise')} variant="outlined" color="primary" style={{ textTransform: "none" }}><RotateLeft /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('counter-clockwise')} variant="outlined" color="primary" style={{ textTransform: "none" }}><RotateLeft /></Button>
                     </Grid>
                     <Grid>
-                        <Button onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('clockwise')} variant="outlined" color="primary" style={{ textTransform: "none" }}><RotateRight /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('clockwise')} variant="outlined" color="primary" style={{ textTransform: "none" }}><RotateRight /></Button>
                     </Grid>
                 </Grid>
             </div>

@@ -19,7 +19,7 @@ class KMR extends Component {
               <KMRGeneralCommands/>
             </Grid>
             <Grid style={{ marginTop: '10vh', paddingRight: '20px'}}>
-              <KMPController/>
+              <KMPController />
             </Grid>
             <Grid>
               <LBRController/>
