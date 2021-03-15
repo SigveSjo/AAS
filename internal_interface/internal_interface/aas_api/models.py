@@ -14,4 +14,4 @@ class Robot(models.Model):
     kmp = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id + " " + self.name + " lbr:" + self.lbr + " kmp:" + self.kmp
+        return self.id + " " + self.name + " lbr:" + str(self.lbr) + " kmp:" + str(self.kmp)
