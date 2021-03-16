@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core'
 import { SportsEsports} from '@material-ui/icons'
 import axios from 'axios'
-import configs from '../config.json'
+import configs from '../../config.json'
 
 const styles = theme => ({
     margin: {

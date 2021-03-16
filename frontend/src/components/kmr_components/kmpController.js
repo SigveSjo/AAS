@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Paper, withStyles, Grid, Button, Slider } from '@material-ui/core';
 import { ArrowUpwardRounded, ArrowDownwardRounded, ArrowBack, ArrowForward, RotateLeft, RotateRight} from '@material-ui/icons'
 import axios from 'axios';
-import configs from '../config.json'
+import configs from '../../config.json'
 
 const styles = theme => ({
     margin: {
@@ -14,17 +14,18 @@ const styles = theme => ({
 });
 
 function KMPController(props) {
-
     const [speed, setSpeed] = useState(0.1)
     const [enabled, setEnabled] = useState(false)
 
-    axios.get(configs.API_URL + "robots/1").then(resp => {
-        setEnabled(resp.data.kmp)
-    });
+    useEffect(() => {
+        axios.get(configs.API_URL + "robots/1").then(resp => {
+            setEnabled(resp.data.kmp)
+        });
+    })
 
     const handleOnChangeSpeed = (event, newValue) => {
         setSpeed(newValue)
-      };
+    };
 
     const moveKMP = (direction) => {
         var vector = null
@@ -54,9 +55,7 @@ function KMPController(props) {
         axios.post(configs.API_URL + "commands/", { "command" : "kmp:" + speed + vector})
     }
 
-     
     const { classes } = props;
-
     return (
         <Paper className={classes.padding}>
             <Grid container justify="center">

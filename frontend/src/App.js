@@ -1,8 +1,9 @@
 // App.js
-import React, { useEffect, useCallback, useState } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import DenseAppBar from './components/appbar'
 import Entity from './components/entity'
-import { Grid, Button, withStyles } from '@material-ui/core'
+import KMR from './components/kmr'
+import { Grid, Button, withStyles, Backdrop, Modal, Fade } from '@material-ui/core'
 import history from './history'
 import Sarus from '@anephenix/sarus';
 import configs from './config.json'
@@ -13,13 +14,34 @@ const styles = theme => ({
   },
   padding: {
       padding: theme.spacing(1)
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    height: '85%',
+    width: '85%',
+    overflow: 'auto',
+    padding: theme.spacing(2,4,3),
   }
 });
 
-function App() {
-
+function App(props) {
   const [kmpStatus, setKmpStatus] = useState(false);
   const [lbrStatus, setLbrStatus] = useState(false);
+  const [componentsOpen, setComponentsOpen] = useState(false)
+
+  const handleComponentsOpen = () => {
+    setComponentsOpen(true);
+  };
+
+  const handleComponentsClose = () => {
+    setComponentsOpen(false);
+  };
 
   useEffect(() => {
     new Sarus({
@@ -42,8 +64,6 @@ function App() {
   }
 
   const updateTimeline = useCallback((event) => {
-      //const newData = JSON.parse(event.message);
-      
       const object = JSON.parse(event.data)
       console.log(object)
 
@@ -57,14 +77,36 @@ function App() {
         }
   }, [])
 
+  const { classes } = props
   return (
       <div style={{background: '#fbfbfb'}}>
         <DenseAppBar />
         <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
-          <Button onClick={() => history.push('/kmr')} >
+          {/*<Button onClick={() => history.push('/kmr')} >
+            <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
+          </Button>*/}
+          <Button onClick={handleComponentsOpen} >
             <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
           </Button>
-        </Grid>  
+        </Grid>
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={componentsOpen}
+          onClose={handleComponentsClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={componentsOpen}>
+            <div className={classes.paper}>
+              <KMR kmp={kmpStatus} lbr={lbrStatus}/>  
+            </div>
+          </Fade>
+        </Modal>  
       </div>
     )
 }
