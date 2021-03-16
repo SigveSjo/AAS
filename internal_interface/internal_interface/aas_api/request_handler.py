@@ -66,7 +66,7 @@ class RequestMiddleware:
                 'rid' : rid,
                 'robot' : robot,
                 'component' : component,
-                'component_status' : str(bool(int(component_status)))
+                'component_status' : bool(int(component_status))
             }
         )     
 
