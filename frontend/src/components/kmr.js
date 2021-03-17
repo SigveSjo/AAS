@@ -2,9 +2,22 @@
 import { useState, useEffect } from 'react';
 import KMRGeneralCommands from './kmr_components/kmrGeneralCommands'
 import KMPController from './kmr_components/kmpController'
-import DenseAppBar from './appbarEntity'
+import ModalAppBar from './appbarEntity'
 import LBRController from './kmr_components/lbrController'
-import { Grid } from '@material-ui/core'
+import { Grid, withStyles } from '@material-ui/core'
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    padding: theme.spacing(2,4,3),
+    borderRadius: 2,
+  },
+  paper: {
+    backgroundColor: '#fbfbfb', //theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    //overflow: 'auto',
+  }
+});
 
 function KMR(props) {
   const [kmp, setKmp] = useState(props.kmp) 
@@ -14,24 +27,27 @@ function KMR(props) {
     console.log("Hello girl!")
   })
 
+  const { classes } = props
   return (
-    <div style={{background: '#fbfbfb', position: 'fixed'}}>
-      <DenseAppBar />
-      <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh'}}>
-        <Grid container justify="center" style={{ marginTop: '10px' }}>
-          <Grid style={{ marginTop: '15vh', padding: '20px'}}>
-            <KMRGeneralCommands/>
-          </Grid>
-          <Grid style={{ marginTop: '10vh', paddingRight: '20px'}}>
-            <KMPController status={kmp}/>
-          </Grid>
-          <Grid>
-            <LBRController status={lbr}/>
+    <div className={classes.paper}>
+      <ModalAppBar close={props.close}/>
+      <Grid container className={classes.root} spacing={2}>
+        <Grid item xs={12}>
+          <Grid container justify="center" spacing={3}>
+            <Grid item>
+              <KMRGeneralCommands/>
+            </Grid>
+            <Grid item>
+              <KMPController status={kmp}/>
+            </Grid>
+            <Grid item>
+              <LBRController status={lbr}/>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>  
+      </Grid>
     </div>
     )
 }
 
-export default KMR;
+export default withStyles(styles)(KMR);

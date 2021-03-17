@@ -13,6 +13,12 @@ const styles = theme => ({
     },
     padding: {
         padding: theme.spacing(1)
+    },
+    image: {
+        flex: 1,
+        width: 200,
+        height: 200,
+        resizeMode: "contain",
     }
 });
 
@@ -35,10 +41,10 @@ function Entity(props) {
     return (
         <Paper className={classes.padding}>
             <Grid container justify="center">
-                <h1> KMR iiwa #1 </h1>
+                <h2> KMR iiwa {props.num} </h2>
             </Grid>
             <div>
-                <img src={kmr} />
+                <img className={classes.image} src={kmr} />
             </div>
             <Grid container justify="center" style={{ marginTop: '10px' }}>
                 <Grid>

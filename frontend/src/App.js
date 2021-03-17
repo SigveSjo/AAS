@@ -9,6 +9,15 @@ import Sarus from '@anephenix/sarus';
 import configs from './config.json'
 
 const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    padding: theme.spacing(10,4,3),
+  },
+  card: {
+    margin: theme.spacing.unit*3,
+    width: "10%",
+    height: "15%"
+  },
   margin: {
       margin: theme.spacing(2),
   },
@@ -81,13 +90,22 @@ function App(props) {
   return (
       <div style={{background: '#fbfbfb'}}>
         <DenseAppBar />
-        <Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
-          {/*<Button onClick={() => history.push('/kmr')} >
-            <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
-          </Button>*/}
+        {/*<Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
           <Button onClick={handleComponentsOpen} >
             <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
           </Button>
+        </Grid>*/}
+        <Grid container className={classes.root} spacing={2}>
+          {[1,2,3,4,5,6].map((value) => (
+            <Grid item className={classes.card} xs={3} sm={2}>
+              <Button onClick={handleComponentsOpen}>
+                <Entity 
+                  kmpStatus={kmpStatus} 
+                  lbrStatus={lbrStatus}
+                  num={value}/>
+              </Button>
+            </Grid>
+          ))}
         </Grid>
         <Modal
           aria-labelledby="transition-modal-title"
@@ -102,8 +120,8 @@ function App(props) {
           }}
         >
           <Fade in={componentsOpen}>
-            <div className={classes.paper}>
-              <KMR kmp={kmpStatus} lbr={lbrStatus}/>  
+            <div>
+              <KMR kmp={kmpStatus} lbr={lbrStatus} close={handleComponentsClose}/>  
             </div>
           </Fade>
         </Modal>  

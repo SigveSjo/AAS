@@ -1,27 +1,25 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   root: {
     flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-
   theme: {
     background: '#f37a00'
   }
+});
 
-}));
+function DenseAppBar(props) {
 
-export default function DenseAppBar() {
-  const classes = useStyles();
-
+  const { classes } = props
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.theme}>
@@ -34,3 +32,5 @@ export default function DenseAppBar() {
     </div>
   );
 }
+
+export default withStyles(styles)(DenseAppBar)
