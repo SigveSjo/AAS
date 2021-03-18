@@ -107,7 +107,7 @@ function ModalAppBar(props) {
                 Cancel
               </Button>
               <Button onClick={handleShutdown} color="primary">
-                Shutdown Entity
+                Shut down
               </Button>
             </DialogActions>
           </Dialog>

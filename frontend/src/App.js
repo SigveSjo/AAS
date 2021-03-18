@@ -11,7 +11,7 @@ import configs from './config.json'
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(10,4,3),
+    padding: theme.spacing(10,0,0),
   },
   card: {
     margin: theme.spacing.unit*3,
@@ -29,13 +29,11 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    height: '85%',
-    width: '85%',
-    overflow: 'auto',
-    padding: theme.spacing(2,4,3),
+  popup: {
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(40,4,3),
+      overflow: "auto"
+    },
   }
 });
 
@@ -95,9 +93,9 @@ function App(props) {
             <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
           </Button>
         </Grid>*/}
-        <Grid container className={classes.root} spacing={2}>
+        <Grid container justify="center" className={classes.root} spacing={2}>
           {[1,2,3,4,5,6].map((value) => (
-            <Grid item className={classes.card} xs={3} sm={2}>
+            <Grid item className={classes.card} xs={5} sm={4} md={3} lg={2}>
               <Button onClick={handleComponentsOpen}>
                 <Entity 
                   kmpStatus={kmpStatus} 
@@ -120,7 +118,7 @@ function App(props) {
           }}
         >
           <Fade in={componentsOpen}>
-            <div>
+            <div className={classes.popup}>
               <KMR kmp={kmpStatus} lbr={lbrStatus} close={handleComponentsClose}/>  
             </div>
           </Fade>
