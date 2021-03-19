@@ -31,7 +31,8 @@ const styles = theme => ({
   },
   popup: {
     [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(40,4,3),
+      //padding: theme.spacing(40,4,3),
+      height: '100%',
       overflow: "auto"
     },
   }

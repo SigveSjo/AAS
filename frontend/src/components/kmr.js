@@ -7,15 +7,14 @@ import LBRController from './kmr_components/lbrController'
 import { Grid, withStyles } from '@material-ui/core'
 
 const styles = theme => ({
+  paper: {
+    backgroundColor: '#fbfbfb', //theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+  },
   root: {
     flexGrow: 1,
     padding: theme.spacing(2,4,3),
     borderRadius: 2,
-  },
-  paper: {
-    backgroundColor: '#fbfbfb', //theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    //overflow: 'auto',
   }
 });
 
@@ -24,7 +23,7 @@ function KMR(props) {
   const [lbr, setLbr] = useState(props.lbr)
 
   useEffect(() => {
-    console.log("Hello girl!")
+
   })
 
   const { classes } = props
