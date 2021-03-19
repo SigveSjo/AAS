@@ -15,8 +15,6 @@ const styles = theme => ({
   },
   card: {
     margin: theme.spacing.unit*3,
-    width: "10%",
-    height: "15%"
   },
   margin: {
       margin: theme.spacing(2),
@@ -31,7 +29,6 @@ const styles = theme => ({
   },
   popup: {
     [theme.breakpoints.down('xs')]: {
-      //padding: theme.spacing(40,4,3),
       height: '100%',
       overflow: "auto"
     },
@@ -94,7 +91,7 @@ function App(props) {
             <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
           </Button>
         </Grid>*/}
-        <Grid container justify="center" className={classes.root} spacing={2}>
+        <Grid container justify="center" className={classes.root}>
           {[1,2,3,4,5,6].map((value) => (
             <Grid item className={classes.card} xs={5} sm={4} md={3} lg={2}>
               <Button onClick={handleComponentsOpen}>

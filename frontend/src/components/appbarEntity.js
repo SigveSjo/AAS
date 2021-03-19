@@ -25,14 +25,15 @@ const API_URL = configs.API_URL + "commands/"
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    
   },
   menuButton: {
     horizontal: 'right',
   },
-
   theme: {
-    background: '#f37a00'
+    background: '#f37a00',
+  },
+  tool: {
+    justifyContent: 'center',
   }
 });
 
@@ -63,18 +64,19 @@ function ModalAppBar(props) {
   return (
     <div className={classes.root}>
       <AppBar position="relative" className={classes.theme}>
-        <Toolbar variant="dense">
+        <Toolbar variant="dense" className={classes.tool}>
           <IconButton
                 aria-label="account of current user"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 color="inherit"
+                style={{position: 'absolute', left:'2vh'}}
                 onClick={props.close}
               >
                 <Home/>
           </IconButton>
 
-          <Typography variant="h6" color="inherit" style={{position: 'absolute', right:'45%'}}>
+          <Typography variant="h6" color="inherit">
             KMR iiwa
           </Typography>
 
