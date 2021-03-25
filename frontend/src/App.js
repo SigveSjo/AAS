@@ -39,8 +39,10 @@ function App(props) {
   const [kmpStatus, setKmpStatus] = useState(false);
   const [lbrStatus, setLbrStatus] = useState(false);
   const [componentsOpen, setComponentsOpen] = useState(false)
+  const [websocket, setWebsocket] = useState(null)
 
   const handleComponentsOpen = () => {
+    websocket.send("Hello from client!")
     setComponentsOpen(true);
   };
 
@@ -49,15 +51,18 @@ function App(props) {
   };
 
   useEffect(() => {
-    new Sarus({
-      url: configs.WS_URL + "ws/",
+    const sarus = new Sarus({
+      //url: configs.WS_URL + "ws/",
+      url: "ws://127.0.0.1:5678/",
       eventListeners: {
           open: [connectionOpened],
           message: [updateTimeline],
           close: [connectionClosed],
           error: [throwError]
       } 
-    });
+    })
+    sarus.send("Websocket connected ayy!")
+    setWebsocket(sarus)
   }, [])
   
   const connectionOpened = () => console.log("Socket connection opened");
@@ -69,17 +74,18 @@ function App(props) {
   }
 
   const updateTimeline = useCallback((event) => {
-      const object = JSON.parse(event.data)
-      console.log(object)
+      // const object = JSON.parse(event.data)
+      // console.log(object)
 
-      if(object.robot == "KMR"){
-          if(object.component == "kmp"){
-            setKmpStatus(object.component_status); 
-          }
-          if(object.component == "lbr"){
-            setLbrStatus(object.component_status); 
-          }
-        }
+      // if(object.robot == "KMR"){
+      //     if(object.component == "kmp"){
+      //       setKmpStatus(object.component_status); 
+      //     }
+      //     if(object.component == "lbr"){
+      //       setLbrStatus(object.component_status); 
+      //     }
+      //   }
+      console.log(event)
   }, [])
 
   const { classes } = props
@@ -102,6 +108,9 @@ function App(props) {
               </Button>
             </Grid>
           ))}
+        </Grid>
+        <Grid>
+          <iframe frameborder="0" noresize="noresize" src="http://127.0.0.1:5000/stream"></iframe>
         </Grid>
         <Modal
           aria-labelledby="transition-modal-title"
