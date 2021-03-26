@@ -1,16 +1,26 @@
 import datetime
 import random
 import asyncio
+import logging
 import threading
 import time, math
+import json
+from io import BytesIO
+from queue import Queue
+#from .websocket import Websocket
+from opcua import ua, Server, uamethod
 
+# Flask
 from flask import Flask, Response, render_template
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-#from flash_socketio import SocketIO, emit
-from .websocket import Websocket
-from queue import Queue
+#from flask_socketio import SocketIO, emit
+
+# Video stream
+from cv2 import cv2 as cv
+import numpy as np
+import base64
 
 
 aas_api = Flask(__name__)
@@ -22,23 +32,68 @@ migrate = Migrate(aas_api, db)
 from aas_api import routes, models
 
 class Sender:
-    def __init__(self):
-        self.q = Queue()
-        threading.Thread(target=self.incoming_data).start()
+    def __init__(self, vs_queue):
+        self.vs_queue = vs_queue
 
     def generate(self):
-        for val in iter(self.q.get, None):
+        for val in iter(self.vs_queue.get, None):
             yield val
 
-    def incoming_data(self):
-        while True:
-            msg = input("Du er så jæla dum: ")
-            self.q.put(msg)
-
     def response(self):
-        return Response(self.generate(), mimetype='text/html')
+        return Response(self.generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
-sender = Sender()
+class Opcua:
+    def __init__(self, vs_queue):
+        self.vs_queue = vs_queue
+        logging.basicConfig(level=logging.WARN)
+        logger = logging.getLogger("opcua.server.internal_subscription")
+        #logger.setLevel(logging.DEBUG)
+
+
+        # setup our server with IP of the computer running the internal_interface
+        with open("config.json", "r") as f:
+            ip_dict = json.load(f)
+
+        server = Server()
+        server.set_endpoint("opc.tcp://" + ip_dict["OPCUA_URL"] + "/freeopcua/server/")
+
+        # setup our own namespace, not really necessary but should as spec
+        uri = "OPCUA_AAS_COMMUNICATION_SERVER"
+        idx = server.register_namespace(uri)
+
+        # get Objects node, this is where we should put our custom stuff
+        objects = server.get_objects_node()
+
+        # populating our address space
+        myobj = objects.add_object(idx, "MyObject")
+        #status_node = myobj.add_method(idx, "update_status", self.update_status, [ua.VariantType.String], [ua.VariantType.Int64])
+        image_node = myobj.add_method(idx, "update_frame", self.receive_image)
+        #print(status_node)
+        
+        lbrEvent = server.create_custom_event_type(idx, 'LBREvent')
+        kmpEvent = server.create_custom_event_type(idx, 'KMPEvent')
+
+        self.lbrEvgen = server.get_event_generator(lbrEvent, myobj)
+        self.kmpEvgen = server.get_event_generator(kmpEvent, myobj)
+
+        # starting!
+        server.start()
+
+    @uamethod
+    def receive_image(self, parent, bytes):        
+        byte_frame = BytesIO(bytes)
+        loaded_frame = np.load(byte_frame, allow_pickle=True)
+        flag, encoded_image = cv.imencode(".jpg", loaded_frame)
+
+        self.vs_queue.put((b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encoded_image) + b'\r\n'))
+
+        # Show video feed
+        # cv.imshow("WINDOW", loaded_frame)
+        # cv.waitKey(1)
+
+video_feed_queue = Queue()
+sender = Sender(video_feed_queue)
+middlware = Opcua(video_feed_queue)
 
 @aas_api.route('/')
 def index():
@@ -48,11 +103,4 @@ def index():
 def stream():
     return sender.response()
 
-def main():
-    #threading.Thread(target=incoming_data)
-    #ws = Websocket("127.0.0.1", 5678)
-    pass
-
-
-main()
     

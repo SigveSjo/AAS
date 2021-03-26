@@ -109,9 +109,6 @@ function App(props) {
             </Grid>
           ))}
         </Grid>
-        <Grid>
-          <iframe frameborder="0" noresize="noresize" src="http://127.0.0.1:5000/stream"></iframe>
-        </Grid>
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"

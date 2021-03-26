@@ -42,6 +42,9 @@ function KMR(props) {
             <Grid item>
               <LBRController status={lbr}/>
             </Grid>
+            <Grid item>
+              <img src={"http://127.0.0.1:5000/stream"} width="200px" height="200px"/>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
