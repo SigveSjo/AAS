@@ -4,9 +4,12 @@ import DenseAppBar from './components/appbar'
 import Entity from './components/entity'
 import KMR from './components/kmr'
 import { Grid, Button, withStyles, Backdrop, Modal, Fade } from '@material-ui/core'
+import socketIOClient from "socket.io-client"
 import history from './history'
 import Sarus from '@anephenix/sarus';
 import configs from './config.json'
+
+const SOCKET_SERVER_URL = "http://127.0.0.1:5001"
 
 const styles = theme => ({
   root: {
@@ -51,6 +54,11 @@ function App(props) {
   };
 
   useEffect(() => {
+    const socket = socketIOClient(SOCKET_SERVER_URL, {
+      transports: ['websocket'],
+      upgrade: false
+    })
+    /*
     const sarus = new Sarus({
       //url: configs.WS_URL + "ws/",
       url: "ws://127.0.0.1:5678/",
@@ -63,8 +71,15 @@ function App(props) {
     })
     sarus.send("Websocket connected ayy!")
     setWebsocket(sarus)
+    */
+    socket.on("status", data => {
+      console.log(data)
+    })
+    setWebsocket(socket)
   }, [])
   
+
+  /*
   const connectionOpened = () => console.log("Socket connection opened");
 
   const connectionClosed = () => console.log("Socket connection closed");
@@ -87,6 +102,9 @@ function App(props) {
       //   }
       console.log(event)
   }, [])
+  */
+
+
 
   const { classes } = props
   return (
@@ -108,6 +126,11 @@ function App(props) {
               </Button>
             </Grid>
           ))}
+        </Grid>
+        <Grid>
+          <Button onClick={() => websocket.emit("click", "Hello from client!")}>
+            Click me!
+          </Button>
         </Grid>
         <Modal
           aria-labelledby="transition-modal-title"
