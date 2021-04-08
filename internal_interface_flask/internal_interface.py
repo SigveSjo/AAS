@@ -6,6 +6,6 @@ import eventlet
 eventlet.monkey_patch()
 
 from eventlet import wsgi
-from aas_api import aas_api
+from aas_api import aas_api, socketio
 
-wsgi.server(eventlet.listen(('', 5001)), aas_api)
+wsgi.server(eventlet.listen(('', 5000)), aas_api, log_output=True, debug=True)

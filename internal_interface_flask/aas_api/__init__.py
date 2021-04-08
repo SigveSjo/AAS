@@ -51,7 +51,6 @@ class Opcua:
         logger = logging.getLogger("opcua.server.internal_subscription")
         #logger.setLevel(logging.DEBUG)
 
-
         # setup our server with IP of the computer running the internal_interface
         with open("config.json", "r") as f:
             ip_dict = json.load(f)
@@ -99,13 +98,6 @@ class Opcua:
 
     def test_send(self):
         socketio.emit('status', "hey from server", broadcast=True)
-        #loop = asyncio.get_running_loop()
-        #loop.create_task(self.send_string())
-
-    def send_string(self):
-        while True:
-            msg = input("Send something to the client: ")
-            socketio.emit('status', msg, broadcast=True)
 
 video_feed_queue = Queue()
 sender = Sender(video_feed_queue)
@@ -130,8 +122,7 @@ def test_disconnect():
 
 @socketio.on('click')
 def receive_click(msg):
-    print(msg)
+    socketio.emit('status', msg, broadcast=True)
+    print(request.headers)
 
-
-aas_api.debug = True
     

@@ -9,7 +9,7 @@ import history from './history'
 import Sarus from '@anephenix/sarus';
 import configs from './config.json'
 
-const SOCKET_SERVER_URL = "http://127.0.0.1:5001"
+const SOCKET_SERVER_URL = "http://127.0.0.1:5000"
 
 const styles = theme => ({
   root: {
