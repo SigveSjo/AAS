@@ -26,7 +26,8 @@ function KMRGeneralCommands(props) {
     const buttonClicked = () =>{
         console.log("Command sent", value)
 
-        axios.post(API_URL, { "command" : value})
+        //axios.post(API_URL, { "command" : value})
+        props.ws.emit('command', { "command" : value })
 
         console.log(Date.now());
     }

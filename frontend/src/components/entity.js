@@ -4,7 +4,6 @@ import kmr from '../resources/images/kmriiwa.png'
 import { Adjust } from '@material-ui/icons'
 import axios from 'axios'
 import configs from '../config.json'
-//import Sarus from '@anephenix/sarus'
 
 
 const styles = theme => ({
@@ -27,6 +26,7 @@ function Entity(props) {
     const [status, setStatus] = useState("offline");
 
     useEffect(() => {
+        /*
         axios.get(configs.API_URL + "robots/1").then(resp => {
             if(resp.data.name == "KMR" && (resp.data.kmp || resp.data.lbr)){
                 setStatus("online")
@@ -35,6 +35,7 @@ function Entity(props) {
                 setStatus("offline")
             }
         });
+        */
     })
 
     const { classes } = props

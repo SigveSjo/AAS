@@ -7,7 +7,6 @@ import time, math
 import json
 from io import BytesIO
 from queue import Queue
-#from .websocket import Websocket
 from opcua import ua, Server, uamethod
 
 # Flask
@@ -33,19 +32,19 @@ socketio = SocketIO(aas_api, cors_allowed_origins="*")
 from aas_api import routes, models
 
 class Sender:
-    def __init__(self, vs_queue):
-        self.vs_queue = vs_queue
+    def __init__(self, vf_queue):
+        self.vf_queue = vf_queue
 
     def generate(self):
-        for val in iter(self.vs_queue.get, None):
+        for val in iter(self.vf_queue.get, None):
             yield val
 
     def response(self):
         return Response(self.generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 class Opcua:
-    def __init__(self, vs_queue):
-        self.vs_queue = vs_queue
+    def __init__(self, vf_queue):
+        self.vf_queue = vf_queue
 
         logging.basicConfig(level=logging.WARN)
         logger = logging.getLogger("opcua.server.internal_subscription")
@@ -67,39 +66,56 @@ class Opcua:
 
         # populating our address space
         myobj = objects.add_object(idx, "MyObject")
+
+        # add server methods
         status_node = myobj.add_method(idx, "update_status", self.update_status, [ua.VariantType.String], [ua.VariantType.Int64])
-        image_node = myobj.add_method(idx, "update_frame", self.receive_image)
-        #print(status_node)
+        image_node = myobj.add_method(idx, "update_frame",  self.update_frame)
         
         lbrEvent = server.create_custom_event_type(idx, 'LBREvent')
         kmpEvent = server.create_custom_event_type(idx, 'KMPEvent')
 
         self.lbrEvgen = server.get_event_generator(lbrEvent, myobj)
         self.kmpEvgen = server.get_event_generator(kmpEvent, myobj)
-
+        
         # starting!
         server.start()
 
     @uamethod
-    def receive_image(self, parent, bytes):        
+    async def update_frame(self, parent, bytes):     
         byte_frame = BytesIO(bytes)
         loaded_frame = np.load(byte_frame, allow_pickle=True)
         flag, encoded_image = cv.imencode(".jpg", loaded_frame)
 
-        self.vs_queue.put((b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encoded_image) + b'\r\n'))
-
-        # Show video feed
-        # cv.imshow("WINDOW", loaded_frame)
-        # cv.waitKey(1)
+        await self.vf_queue.put((b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encoded_image) + b'\r\n'))
     
     @uamethod
     def update_status(self, parent, msg):
-        pass
+        rid, robot, component, component_status = msg.split(':')
+        jdata = json.dumps({
+            'rid': rid,
+            'robot': robot,
+            'component': component,
+            'component_status': component_status
+        })
+        socketio.emit('status', jdata, broadcast=True)
+
+    def send_to_entity(self, cmd):
+        command_splt = cmd.split(":")
+
+        if command_splt[0] == "lbr":
+            self.lbrEvgen.event.Message = ua.LocalizedText(command_splt[1])
+            self.lbrEvgen.trigger()
+            print("LBREvent sent!")
+        elif command_splt[0] == "kmp":
+            self.kmpEvgen.event.Message = ua.LocalizedText(command_splt[1])
+            self.kmpEvgen.trigger()
+            print("KMPEvent sent!")
 
     def test_send(self):
-        socketio.emit('status', "hey from server", broadcast=True)
+        socketio.emit('event', "Hello from server", broadcast=True)
+        
 
-video_feed_queue = Queue()
+video_feed_queue = Queue(maxsize=5)
 sender = Sender(video_feed_queue)
 middleware = Opcua(video_feed_queue)
 
@@ -112,17 +128,20 @@ def stream():
     return sender.response()
 
 @socketio.on('connect')
-def test_connect():
-    emit('my response', {'data': 'Connected'})
+def connect():
     middleware.test_send()
 
 @socketio.on('disconnect')
-def test_disconnect():
+def disconnect():
     print('Client disconnected')
+
+@socketio.on('command')
+def receive_command(cmd):
+    middleware.send_to_entity(cmd['command'])
 
 @socketio.on('click')
 def receive_click(msg):
-    socketio.emit('status', msg, broadcast=True)
+    socketio.emit('event', msg, broadcast=True)
     print(request.headers)
 
     

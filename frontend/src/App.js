@@ -1,12 +1,10 @@
 // App.js
-import { useEffect, useCallback, useState } from 'react'
+import { useEffect, useState } from 'react'
 import DenseAppBar from './components/appbar'
 import Entity from './components/entity'
 import KMR from './components/kmr'
 import { Grid, Button, withStyles, Backdrop, Modal, Fade } from '@material-ui/core'
 import socketIOClient from "socket.io-client"
-import history from './history'
-import Sarus from '@anephenix/sarus';
 import configs from './config.json'
 
 const SOCKET_SERVER_URL = "http://127.0.0.1:5000"
@@ -17,7 +15,7 @@ const styles = theme => ({
     padding: theme.spacing(10,0,0),
   },
   card: {
-    margin: theme.spacing.unit*3,
+    margin: theme.spacing(3),
   },
   margin: {
       margin: theme.spacing(2),
@@ -45,7 +43,6 @@ function App(props) {
   const [websocket, setWebsocket] = useState(null)
 
   const handleComponentsOpen = () => {
-    websocket.send("Hello from client!")
     setComponentsOpen(true);
   };
 
@@ -58,48 +55,40 @@ function App(props) {
       transports: ['websocket'],
       upgrade: false
     })
-    /*
-    const sarus = new Sarus({
-      //url: configs.WS_URL + "ws/",
-      url: "ws://127.0.0.1:5678/",
-      eventListeners: {
-          open: [connectionOpened],
-          message: [updateTimeline],
-          close: [connectionClosed],
-          error: [throwError]
-      } 
-    })
-    sarus.send("Websocket connected ayy!")
-    setWebsocket(sarus)
-    */
-    socket.on("status", data => {
+    socket.on('event', data => {
       console.log(data)
+    })
+    socket.on('status', data => {
+      const object = JSON.parse(data)
+      console.log(object)
+
+      if(object.robot == "KMR"){
+          if(object.component == "kmp"){
+            setKmpStatus(object.component_status); 
+          }
+          if(object.component == "lbr"){
+            setLbrStatus(object.component_status); 
+          }
+        }
     })
     setWebsocket(socket)
   }, [])
   
 
   /*
-  const connectionOpened = () => console.log("Socket connection opened");
-
-  const connectionClosed = () => console.log("Socket connection closed");
-
-  const throwError = error => {
-      throw error;
-  }
 
   const updateTimeline = useCallback((event) => {
-      // const object = JSON.parse(event.data)
-      // console.log(object)
+      const object = JSON.parse(event.data)
+      console.log(object)
 
-      // if(object.robot == "KMR"){
-      //     if(object.component == "kmp"){
-      //       setKmpStatus(object.component_status); 
-      //     }
-      //     if(object.component == "lbr"){
-      //       setLbrStatus(object.component_status); 
-      //     }
-      //   }
+      if(object.robot == "KMR"){
+          if(object.component == "kmp"){
+            setKmpStatus(object.component_status); 
+          }
+          if(object.component == "lbr"){
+            setLbrStatus(object.component_status); 
+          }
+        }
       console.log(event)
   }, [])
   */
@@ -117,7 +106,7 @@ function App(props) {
         </Grid>*/}
         <Grid container justify="center" className={classes.root}>
           {[1,2,3,4,5,6].map((value) => (
-            <Grid item className={classes.card} xs={5} sm={4} md={3} lg={2}>
+            <Grid item key={value} className={classes.card} xs={5} sm={4} md={3} lg={2}>
               <Button onClick={handleComponentsOpen}>
                 <Entity 
                   kmpStatus={kmpStatus} 
@@ -146,7 +135,7 @@ function App(props) {
         >
           <Fade in={componentsOpen}>
             <div className={classes.popup}>
-              <KMR kmp={kmpStatus} lbr={lbrStatus} close={handleComponentsClose}/>  
+              <KMR ws={websocket} kmp={kmpStatus} lbr={lbrStatus} close={handleComponentsClose}/>  
             </div>
           </Fade>
         </Modal>  

@@ -21,13 +21,16 @@ function LBRController(props) {
     const [enabled, setEnabled] = useState(false)
 
     const moveLBR = (joint, direction) => {
-        axios.post(configs.API_URL + "commands/", { "command" : "lbr:" + joint + " " + direction})
+        //axios.post(configs.API_URL + "commands/", { "command" : "lbr:" + joint + " " + direction})
+        props.ws.emit('command', { "command" : "lbr:" + joint + " " + direction })
     }
 
     useEffect(() => {
+        /*
         axios.get(configs.API_URL + "robots/1").then(resp => {
             setEnabled(resp.data.lbr)
-        });
+        })
+        */
     })
      
     const { classes } = props;

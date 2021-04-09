@@ -15,12 +15,14 @@ const styles = theme => ({
 
 function KMPController(props) {
     const [speed, setSpeed] = useState(0.1)
-    const [enabled, setEnabled] = useState(false)
+    const [enabled, setEnabled] = useState(true)
 
     useEffect(() => {
+        /*
         axios.get(configs.API_URL + "robots/1").then(resp => {
             setEnabled(resp.data.kmp)
         });
+        */
     })
 
     const handleOnChangeSpeed = (event, newValue) => {
@@ -52,7 +54,8 @@ function KMPController(props) {
             vector = " 0 0 0"
         }
         
-        axios.post(configs.API_URL + "commands/", { "command" : "kmp:" + speed + vector})
+        //axios.post(configs.API_URL + "commands/", { "command" : "kmp:" + speed + vector})
+        props.ws.emit('command', { "command" : "kmp:" + speed + vector })
     }
 
     const { classes } = props;

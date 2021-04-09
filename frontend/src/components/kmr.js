@@ -37,10 +37,10 @@ function KMR(props) {
               <KMRGeneralCommands/>
             </Grid>
             <Grid item>
-              <KMPController status={kmp}/>
+              <KMPController ws={props.ws} status={kmp}/>
             </Grid>
             <Grid item>
-              <LBRController status={lbr}/>
+              <LBRController ws={props.ws} status={lbr}/>
             </Grid>
             <Grid item>
               <img src={"http://127.0.0.1:5000/stream"} width="200px" height="200px"/>
