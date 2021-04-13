@@ -10,7 +10,7 @@ from queue import Queue
 from opcua import ua, Server, uamethod
 
 # Flask
-from flask import Flask, Response, render_template, request
+from flask import Flask, Response, render_template, request, jsonify
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -24,6 +24,7 @@ import base64
 
 
 aas_api = Flask(__name__)
+CORS(aas_api)
 aas_api.config.from_object(Config)
 db = SQLAlchemy(aas_api)
 migrate = Migrate(aas_api, db)
@@ -91,11 +92,38 @@ class Opcua:
     @uamethod
     def update_status(self, parent, msg):
         rid, robot, component, component_status = msg.split(':')
+
+        """
+            To facilitate the support for many different types of robots, 
+            the Robot table cannot know about any specific components the robots
+            might have (such as KMP or LBR). Therefore, the components and their
+            statuses are stored in a serialized json object which grows for every 
+            new component that is connected for a specific robot.
+        """
+        entry = models.Robot.query.filter_by(id=rid).first()
+        if not entry:
+            dump = {
+                component: bool(int(component_status))
+            }  
+
+            new_robot = models.Robot(
+                id=rid, 
+                name=robot,
+                components=json.dumps(dump)
+            )
+
+            db.session.add(new_robot)
+        else:
+            dump = json.loads(entry.components)
+            dump[component] = bool(int(component_status))
+            entry.components = json.dumps(dump)
+        db.session.commit()
+
         jdata = json.dumps({
             'rid': rid,
             'robot': robot,
             'component': component,
-            'component_status': component_status
+            'component_status': bool(int(component_status))
         })
         socketio.emit('status', jdata, broadcast=True)
 
@@ -123,7 +151,17 @@ middleware = Opcua(video_feed_queue)
 def index():
     return "Hello World!"
 
-@aas_api.route('/stream')
+@aas_api.route('/api/robots/<rid>')
+def get_specific_robot(rid):
+    robot = models.Robot.query.filter_by(id=rid).first_or_404()
+
+    return {
+        'rid': robot.id,
+        'name': robot.name,
+        'components': json.loads(robot.components)
+    }
+
+@aas_api.route('/api/stream')
 def stream():
     return sender.response()
 

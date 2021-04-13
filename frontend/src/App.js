@@ -1,13 +1,11 @@
 // App.js
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useReducer } from 'react'
 import DenseAppBar from './components/appbar'
 import Entity from './components/entity'
 import KMR from './components/kmr'
 import { Grid, Button, withStyles, Backdrop, Modal, Fade } from '@material-ui/core'
 import socketIOClient from "socket.io-client"
 import configs from './config.json'
-
-const SOCKET_SERVER_URL = "http://127.0.0.1:5000"
 
 const styles = theme => ({
   root: {
@@ -21,7 +19,7 @@ const styles = theme => ({
       margin: theme.spacing(2),
   },
   padding: {
-      padding: theme.spacing(1)
+    padding: theme.spacing(1)
   },
   modal: {
     display: 'flex',
@@ -34,11 +32,13 @@ const styles = theme => ({
       overflow: "auto"
     },
   }
-});
+})
+
+const SOCKET_SERVER_URL = "http://127.0.0.1:5000"
+const ROBOTS = ['KMR iiwa']
 
 function App(props) {
-  const [kmpStatus, setKmpStatus] = useState(false);
-  const [lbrStatus, setLbrStatus] = useState(false);
+
   const [componentsOpen, setComponentsOpen] = useState(false)
   const [websocket, setWebsocket] = useState(null)
 
@@ -58,69 +58,35 @@ function App(props) {
     socket.on('event', data => {
       console.log(data)
     })
-    socket.on('status', data => {
-      const object = JSON.parse(data)
-      console.log(object)
-
-      if(object.robot == "KMR"){
-          if(object.component == "kmp"){
-            setKmpStatus(object.component_status); 
-          }
-          if(object.component == "lbr"){
-            setLbrStatus(object.component_status); 
-          }
-        }
-    })
     setWebsocket(socket)
   }, [])
-  
-
-  /*
-
-  const updateTimeline = useCallback((event) => {
-      const object = JSON.parse(event.data)
-      console.log(object)
-
-      if(object.robot == "KMR"){
-          if(object.component == "kmp"){
-            setKmpStatus(object.component_status); 
-          }
-          if(object.component == "lbr"){
-            setLbrStatus(object.component_status); 
-          }
-        }
-      console.log(event)
-  }, [])
-  */
-
-
 
   const { classes } = props
   return (
       <div style={{background: '#fbfbfb'}}>
         <DenseAppBar />
-        {/*<Grid container direction="column" justify="center" alignItems="center" style={{ minHeight: '100vh' }}>
-          <Button onClick={handleComponentsOpen} >
-            <Entity kmpStatus={kmpStatus} lbrStatus={lbrStatus}/>
-          </Button>
-        </Grid>*/}
         <Grid container justify="center" className={classes.root}>
-          {[1,2,3,4,5,6].map((value) => (
-            <Grid item key={value} className={classes.card} xs={5} sm={4} md={3} lg={2}>
+          {ROBOTS.map((name, index) => (
+            <Grid item key={index} className={classes.card} xs={5} sm={4} md={3} lg={2}>
               <Button onClick={handleComponentsOpen}>
                 <Entity 
-                  kmpStatus={kmpStatus} 
-                  lbrStatus={lbrStatus}
-                  num={value}/>
+                  ws={websocket}
+                  name={name}
+                  rid={1}
+                />
               </Button>
             </Grid>
           ))}
         </Grid>
-        <Grid>
-          <Button onClick={() => websocket.emit("click", "Hello from client!")}>
-            Click me!
-          </Button>
-        </Grid>
+        {
+          /*
+          <Grid>
+            <Button onClick={() => websocket.emit("click", "Hello from client!")}>
+              Click me!
+            </Button>
+          </Grid>
+          */
+        }
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
@@ -135,7 +101,8 @@ function App(props) {
         >
           <Fade in={componentsOpen}>
             <div className={classes.popup}>
-              <KMR ws={websocket} kmp={kmpStatus} lbr={lbrStatus} close={handleComponentsClose}/>  
+              {/*TODO: MAKE A MORE GENRAL COMPONENT THAT CAN HANDLE ANY ROBOT TYPE*/}
+              <KMR rid={1} ws={websocket} close={handleComponentsClose}/>  
             </div>
           </Fade>
         </Modal>  

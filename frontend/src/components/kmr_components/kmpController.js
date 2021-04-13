@@ -18,11 +18,7 @@ function KMPController(props) {
     const [enabled, setEnabled] = useState(true)
 
     useEffect(() => {
-        /*
-        axios.get(configs.API_URL + "robots/1").then(resp => {
-            setEnabled(resp.data.kmp)
-        });
-        */
+        setEnabled(props.status)
     })
 
     const handleOnChangeSpeed = (event, newValue) => {
@@ -54,7 +50,6 @@ function KMPController(props) {
             vector = " 0 0 0"
         }
         
-        //axios.post(configs.API_URL + "commands/", { "command" : "kmp:" + speed + vector})
         props.ws.emit('command', { "command" : "kmp:" + speed + vector })
     }
 

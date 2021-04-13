@@ -1,10 +1,12 @@
 // App.js
-import { useState, useEffect } from 'react';
+import { useReducer, useEffect, useCallback } from 'react';
 import KMRGeneralCommands from './kmr_components/kmrGeneralCommands'
 import KMPController from './kmr_components/kmpController'
 import ModalAppBar from './appbarEntity'
 import LBRController from './kmr_components/lbrController'
 import { Grid, withStyles } from '@material-ui/core'
+import axios from 'axios'
+import configs from '../config.json'
 
 const styles = theme => ({
   paper: {
@@ -16,15 +18,46 @@ const styles = theme => ({
     padding: theme.spacing(2,4,3),
     borderRadius: 2,
   }
-});
+})
+
+function reducer(state, action){
+  switch (action.type){
+    case 'update':
+      return {
+        ...state,
+        name: action.name,
+        components: action.components
+      }
+  }
+}
 
 function KMR(props) {
-  const [kmp, setKmp] = useState(props.kmp) 
-  const [lbr, setLbr] = useState(props.lbr)
+  const [robotState, dispatch] = useReducer(reducer, {
+    name: "",
+    components: []
+  })
+
+  const fetch = useCallback((rid) => {
+    axios.get(configs.API_URL + "robots/" + rid).then(resp => {
+      dispatch({type: 'update', 
+                id: resp.data.id, 
+                name: resp.data.name, 
+                components: resp.data.components})
+    })
+  }, [])
 
   useEffect(() => {
+    fetch(props.rid)
+    try{
+      props.ws.on('status', data => {
+        const object = JSON.parse(data)
+        fetch(object.rid)
+      })
+    } catch (e){
+        console.log("Websocket is not connected!")
+    }
+  }, [props.ws])
 
-  })
 
   const { classes } = props
   return (
@@ -37,14 +70,16 @@ function KMR(props) {
               <KMRGeneralCommands/>
             </Grid>
             <Grid item>
-              <KMPController ws={props.ws} status={kmp}/>
+              <KMPController ws={props.ws} status={robotState.components.kmp}/>
             </Grid>
             <Grid item>
-              <LBRController ws={props.ws} status={lbr}/>
+              <LBRController ws={props.ws} status={robotState.components.lbr}/>
             </Grid>
+            {/*
             <Grid item>
               <img src={"http://127.0.0.1:5000/stream"} width="200px" height="200px"/>
             </Grid>
+             */}
           </Grid>
         </Grid>
       </Grid>

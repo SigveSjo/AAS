@@ -10,8 +10,7 @@ class Command(db.Model):
 class Robot(db.Model):
     id = db.Column(db.String(100), primary_key=True, unique=True)
     name = db.Column(db.String(100))
-    lbr = db.Column(db.Boolean(False))
-    kmp = db.Column(db.Boolean(False))
+    components = db.Column(db.String(10000))
 
     def __repr__(self):
-        return self.id + " " + self.name + " lbr:" + str(self.lbr) + " kmp:" + str(self.kmp)
+        return self.id + " " + self.name + " components:" + str(self.components)

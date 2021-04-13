@@ -1,7 +1,6 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useCallback, useState} from 'react'
 import { Paper, withStyles, Grid} from '@material-ui/core'
 import kmr from '../resources/images/kmriiwa.png'
-import { Adjust } from '@material-ui/icons'
 import axios from 'axios'
 import configs from '../config.json'
 
@@ -19,25 +18,37 @@ const styles = theme => ({
         height: 200,
         resizeMode: "contain",
     }
-});
+})
 
 function Entity(props) {
-
     const [status, setStatus] = useState("offline");
 
-    useEffect(() => {
-        /*
-        axios.get(configs.API_URL + "robots/1").then(resp => {
-            if(resp.data.name == "KMR" && (resp.data.kmp || resp.data.lbr)){
+    const fetch = useCallback((rid) => {
+        axios.get(configs.API_URL + "robots/" + rid).then(resp => {
+                    
+            // Temporary solution for handling specific robots
+            if(resp.data.name == "KMR" && (resp.data.components.kmp || resp.data.components.lbr)){
                 setStatus("online")
             }
             else{
                 setStatus("offline")
             }
-        });
-        */
-    })
+        })
+    }, [])
 
+    useEffect(() => {
+        fetch(props.rid)
+        try{
+            props.ws.on('status', data => {
+                const object = JSON.parse(data)
+                fetch(object.rid)
+            })
+        } catch (e){
+            console.log("Websocket is not connected!")
+        }
+    }, [props.ws])
+
+    
     const { classes } = props
     return (
         <Paper className={classes.padding}>
