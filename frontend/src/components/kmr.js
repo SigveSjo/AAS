@@ -92,11 +92,12 @@ function KMR(props) {
                 {cameraButton}
               </Button>
             </Grid>
-            {/*
-            <Grid item>
-              <img src={"http://127.0.0.1:5000/stream"} width="200px" height="200px"/>
-            </Grid>
-             */}
+            {
+              (cameraButton.localeCompare("STOP") == 0) &&
+              <Grid item>
+                <img src={"http://localhost:8080/video"} width="200px" height="200px"/>
+              </Grid>
+            }
           </Grid>
         </Grid>
       </Grid>
