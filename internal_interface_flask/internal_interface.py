@@ -1,6 +1,8 @@
 """
 In case of python threading (which interferes with eventlet),
 monkey patch to allow for evenlet-friendly versions.
+Since python-opcua uses asyncio to handle multiprocessing, monkey patching
+is necessary.
 """
 import eventlet
 eventlet.monkey_patch()
