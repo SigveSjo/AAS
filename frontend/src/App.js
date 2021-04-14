@@ -44,11 +44,11 @@ function App(props) {
 
   const handleComponentsOpen = () => {
     setComponentsOpen(true);
-  };
+  }
 
   const handleComponentsClose = () => {
     setComponentsOpen(false);
-  };
+  }
 
   useEffect(() => {
     const socket = socketIOClient(SOCKET_SERVER_URL, {
@@ -80,13 +80,14 @@ function App(props) {
         </Grid>
         {
           /*
-          <Grid>
-            <Button onClick={() => websocket.emit("click", "Hello from client!")}>
-              Click me!
-            </Button>
-          </Grid>
+            <Grid>
+              <Button onClick={() => websocket.emit("click", "Hello from client!")}>
+                Click me!
+              </Button>
+            </Grid>
           */
         }
+        
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"

@@ -1,9 +1,5 @@
-import datetime
-import random
 import asyncio
 import logging
-import threading
-import time, math
 import json
 from io import BytesIO
 from queue import Queue
@@ -21,7 +17,6 @@ from flask_cors import CORS
 from cv2 import cv2 as cv
 import numpy as np
 import base64
-
 
 aas_api = Flask(__name__)
 CORS(aas_api)
@@ -70,13 +65,15 @@ class Opcua:
 
         # add server methods
         status_node = myobj.add_method(idx, "update_status", self.update_status, [ua.VariantType.String], [ua.VariantType.Int64])
-        image_node = myobj.add_method(idx, "update_frame",  self.update_frame)
+        #image_node = myobj.add_method(idx, "update_frame",  self.update_frame)
         
         lbrEvent = server.create_custom_event_type(idx, 'LBREvent')
         kmpEvent = server.create_custom_event_type(idx, 'KMPEvent')
+        cameraEvent = server.create_custom_event_type(idx, 'CameraEvent')
 
         self.lbrEvgen = server.get_event_generator(lbrEvent, myobj)
         self.kmpEvgen = server.get_event_generator(kmpEvent, myobj)
+        self.cameraEvgen = server.get_event_generator(cameraEvent, myobj)
         
         # starting!
         server.start()
@@ -139,6 +136,11 @@ class Opcua:
             self.kmpEvgen.trigger()
             print("KMPEvent sent!")
 
+    def send_to_camera(self, event):
+        self.cameraEvgen.event.Message = ua.LocalizedText(event)
+        self.cameraEvgen.trigger()
+        print("CameraEvent sent!")
+
     def test_send(self):
         socketio.emit('event', "Hello from server", broadcast=True)
         
@@ -147,6 +149,7 @@ video_feed_queue = Queue(maxsize=5)
 sender = Sender(video_feed_queue)
 middleware = Opcua(video_feed_queue)
 
+### ROUTES ###
 @aas_api.route('/')
 def index():
     return "Hello World!"
@@ -165,6 +168,8 @@ def get_specific_robot(rid):
 def stream():
     return sender.response()
 
+
+### WEBSOCKET IMPLEMENTATION ###
 @socketio.on('connect')
 def connect():
     middleware.test_send()
@@ -176,6 +181,10 @@ def disconnect():
 @socketio.on('command')
 def receive_command(cmd):
     middleware.send_to_entity(cmd['command'])
+
+@socketio.on('camera_event')
+def receive_camera_event(cmd):
+    middleware.send_to_camera(cmd['camera_event'])
 
 @socketio.on('click')
 def receive_click(msg):

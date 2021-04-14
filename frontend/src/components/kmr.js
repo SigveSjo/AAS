@@ -1,10 +1,10 @@
 // App.js
-import { useReducer, useEffect, useCallback } from 'react';
+import { useState, useReducer, useEffect, useCallback } from 'react';
 import KMRGeneralCommands from './kmr_components/kmrGeneralCommands'
 import KMPController from './kmr_components/kmpController'
 import ModalAppBar from './appbarEntity'
 import LBRController from './kmr_components/lbrController'
-import { Grid, withStyles } from '@material-ui/core'
+import { Grid, withStyles, Button } from '@material-ui/core'
 import axios from 'axios'
 import configs from '../config.json'
 
@@ -32,6 +32,7 @@ function reducer(state, action){
 }
 
 function KMR(props) {
+  const [cameraButton, setCameraButton] = useState("Start")
   const [robotState, dispatch] = useReducer(reducer, {
     name: "",
     components: []
@@ -49,14 +50,25 @@ function KMR(props) {
   useEffect(() => {
     fetch(props.rid)
     try{
+      console.log("Kmr ws connected")
       props.ws.on('status', data => {
+        console.log("Got emit")
         const object = JSON.parse(data)
         fetch(object.rid)
       })
     } catch (e){
-        console.log("Websocket is not connected!")
+      console.log("Websocket is not connected!")
     }
   }, [props.ws])
+
+  const handleCameraEvent = (() => {
+    props.ws.emit("camera_event", {'camera_event': cameraButton})
+    if(cameraButton.localeCompare("STOP") == 0){
+      setCameraButton("START")
+    } else {
+      setCameraButton("STOP")
+    }
+  })
 
 
   const { classes } = props
@@ -74,6 +86,11 @@ function KMR(props) {
             </Grid>
             <Grid item>
               <LBRController ws={props.ws} status={robotState.components.lbr}/>
+            </Grid>
+            <Grid>
+              <Button onClick={handleCameraEvent}>
+                {cameraButton}
+              </Button>
             </Grid>
             {/*
             <Grid item>
