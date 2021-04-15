@@ -18,9 +18,12 @@ socketio = SocketIO(aas_api, cors_allowed_origins="*")
 
 from aas_api import models, server
 
+with open("config.json", "r") as f:
+    ip_dict = json.load(f)
+
 video_feed_queue = Queue(maxsize=5)
 sender = server.FrameProdCon(video_feed_queue)
-middleware = server.OpcuaServer(socketio, db, video_feed_queue)
+middleware = server.OpcuaServer(ip_dict["OPCUA_URL"], socketio, db, video_feed_queue)
 
 ### ROUTES ###
 @aas_api.route('/')

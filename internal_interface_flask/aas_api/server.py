@@ -22,7 +22,7 @@ class FrameProdCon:
         return Response(self.generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 class OpcuaServer:
-    def __init__(self, socketio, db, vf_queue):
+    def __init__(self, opcua_address, socketio, db, vf_queue):
         self.vf_queue = vf_queue
         self.socketio = socketio
         self.db = db
@@ -31,12 +31,8 @@ class OpcuaServer:
         logger = logging.getLogger("opcua.server.internal_subscription")
         #logger.setLevel(logging.DEBUG)
 
-        # setup our server with IP of the computer running the internal_interface
-        with open("config.json", "r") as f:
-            ip_dict = json.load(f)
-
         server = Server()
-        server.set_endpoint("opc.tcp://" + ip_dict["OPCUA_URL"] + "/freeopcua/server/")
+        server.set_endpoint("opc.tcp://" + opcua_address + "/freeopcua/server/")
 
         # setup our own namespace, not really necessary but should as spec
         uri = "OPCUA_AAS_COMMUNICATION_SERVER"

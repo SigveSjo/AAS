@@ -39,7 +39,7 @@ function KMR(props) {
   })
 
   const fetch = useCallback((rid) => {
-    axios.get(configs.API_URL + "robots/" + rid).then(resp => {
+    axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
       dispatch({type: 'update', 
                 id: resp.data.id, 
                 name: resp.data.name, 
@@ -50,9 +50,7 @@ function KMR(props) {
   useEffect(() => {
     fetch(props.rid)
     try{
-      console.log("Kmr ws connected")
       props.ws.on('status', data => {
-        console.log("Got emit")
         const object = JSON.parse(data)
         fetch(object.rid)
       })

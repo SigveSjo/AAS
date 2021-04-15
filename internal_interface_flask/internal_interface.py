@@ -8,6 +8,8 @@ import eventlet
 eventlet.monkey_patch()
 
 from eventlet import wsgi
-from aas_api import aas_api
+from aas_api import aas_api, ip_dict
 
-wsgi.server(eventlet.listen(('127.0.0.1', 5000)), aas_api, log_output=True, debug=True)
+ip_split = ip_dict["SERVER_URL"].split(":")
+
+wsgi.server(eventlet.listen((ip_split[0], int(ip_split[1]))), aas_api, log_output=True, debug=True)

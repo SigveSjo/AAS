@@ -24,7 +24,7 @@ function Entity(props) {
     const [status, setStatus] = useState("offline");
 
     const fetch = useCallback((rid) => {
-        axios.get(configs.API_URL + "robots/" + rid).then(resp => {
+        axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
                     
             // Temporary solution for handling specific robots
             if(resp.data.name == "KMR" && (resp.data.components.kmp || resp.data.components.lbr)){
