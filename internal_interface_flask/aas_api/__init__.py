@@ -30,6 +30,19 @@ middleware = server.OpcuaServer(ip_dict["OPCUA_URL"], socketio, db, video_feed_q
 def index():
     return "Hello World!"
 
+@aas_api.route('/api/robots')
+def get_all_robots():
+    robots = models.Robot.query.all()
+    result = []
+    for robot in robots:
+        result.append({
+            'rid': robot.id,
+            'name': robot.name,
+            'components': json.loads(robot.components)
+        })
+    
+    return { 'robots': result }
+
 @aas_api.route('/api/robots/<rid>')
 def get_specific_robot(rid):
     robot = models.Robot.query.filter_by(id=rid).first_or_404()

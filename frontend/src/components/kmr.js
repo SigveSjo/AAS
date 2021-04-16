@@ -34,25 +34,28 @@ function reducer(state, action){
 function KMR(props) {
   const [cameraButton, setCameraButton] = useState("Start")
   const [robotState, dispatch] = useReducer(reducer, {
-    name: "",
-    components: []
+    rid: "",
+    components: {}
   })
 
   const fetch = useCallback((rid) => {
     axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
       dispatch({type: 'update', 
-                id: resp.data.id, 
-                name: resp.data.name, 
+                rid: resp.data.rid,
                 components: resp.data.components})
     })
   }, [])
 
   useEffect(() => {
-    fetch(props.rid)
+    dispatch({type: 'update', 
+              rid: props.robot.rid,
+              components: props.robot.components})
     try{
       props.ws.on('status', data => {
         const object = JSON.parse(data)
-        fetch(object.rid)
+        if(object.rid === robotState.rid){
+          fetch(object.rid)
+        }
       })
     } catch (e){
       console.log("Websocket is not connected!")
@@ -77,7 +80,7 @@ function KMR(props) {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={3}>
             <Grid item>
-              <KMRGeneralCommands/>
+              <KMRGeneralCommands ws={props.ws}/>
             </Grid>
             <Grid item>
               <KMPController ws={props.ws} status={robotState.components.kmp}/>

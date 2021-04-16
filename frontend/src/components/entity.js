@@ -25,23 +25,27 @@ function Entity(props) {
 
     const fetch = useCallback((rid) => {
         axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
-                    
-            // Temporary solution for handling specific robots
-            if(resp.data.name == "KMR" && (resp.data.components.kmp || resp.data.components.lbr)){
-                setStatus("online")
-            }
-            else{
-                setStatus("offline")
-            }
+            setEntityStatus(resp.data.components)
         })
     }, [])
 
+    const setEntityStatus = useCallback((components) => {
+        const statuses = Object.values(components)
+        if(statuses.includes(true)){
+            setStatus("online")
+            return
+        }
+        setStatus("offline")
+    }, [])
+
     useEffect(() => {
-        fetch(props.rid)
+        setEntityStatus(props.components)
         try{
             props.ws.on('status', data => {
                 const object = JSON.parse(data)
-                fetch(object.rid)
+                if(object.rid === props.rid){
+                    fetch(object.rid)
+                }
             })
         } catch (e){
             console.log("Websocket is not connected!")
@@ -53,7 +57,7 @@ function Entity(props) {
     return (
         <Paper className={classes.padding}>
             <Grid container justify="center">
-                <h2> KMR iiwa {props.num} </h2>
+                <h2> {props.name} (RID: {props.rid}) </h2>
             </Grid>
             <div>
                 <img className={classes.image} src={kmr} />
