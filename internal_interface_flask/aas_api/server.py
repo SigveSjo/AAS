@@ -69,8 +69,9 @@ class OpcuaServer:
     
     @uamethod
     def update_status(self, parent, msg):
-        rid, robot, component, component_status = msg.split(':')
+        rid, robot, component, component_status, *kwargs = msg.split(':')
 
+        print(msg.split(':'))
         """
             To facilitate the support for many different types of robots, 
             the Robot table cannot know about any specific components the robots
@@ -82,19 +83,25 @@ class OpcuaServer:
         if not entry:
             dump = {
                 component: bool(int(component_status))
-            }  
+            } 
 
             new_robot = models.Robot(
                 id=rid, 
                 name=robot,
-                components=json.dumps(dump)
+                components=json.dumps(dump),
             )
+
+            if component == "camera":
+                new_robot.udp_url = kwargs[0] + ":" + kwargs[1]
 
             self.db.session.add(new_robot)
         else:
             dump = json.loads(entry.components)
             dump[component] = bool(int(component_status))
             entry.components = json.dumps(dump)
+            if component == "camera":
+                entry.udp_url = kwargs[0] + ":" + kwargs[1]
+            
         self.db.session.commit()
 
         jdata = json.dumps({

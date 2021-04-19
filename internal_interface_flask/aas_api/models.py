@@ -11,6 +11,7 @@ class Robot(db.Model):
     id = db.Column(db.String(100), primary_key=True, unique=True)
     name = db.Column(db.String(100))
     components = db.Column(db.String(10000))
+    udp_url = db.Column(db.String(100))
 
     def __repr__(self):
         return self.id + " " + self.name + " components:" + str(self.components)

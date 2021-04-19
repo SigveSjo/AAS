@@ -38,7 +38,8 @@ def get_all_robots():
         result.append({
             'rid': robot.id,
             'name': robot.name,
-            'components': json.loads(robot.components)
+            'components': json.loads(robot.components),
+            'udp_url': robot.udp_url
         })
     
     return { 'robots': result }
@@ -50,7 +51,8 @@ def get_specific_robot(rid):
     return {
         'rid': robot.id,
         'name': robot.name,
-        'components': json.loads(robot.components)
+        'components': json.loads(robot.components),
+        'udp_url': robot.udp_url
     }
 
 @aas_api.route('/api/stream')
