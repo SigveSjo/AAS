@@ -18,6 +18,12 @@ socketio = SocketIO(aas_api, cors_allowed_origins="*")
 
 from aas_api import models, server
 
+
+"""
+entry = models.Robot.query.filter_by(id="1").first()
+db.session.delete(entry)
+db.session.commit()
+"""
 with open("config.json", "r") as f:
     ip_dict = json.load(f)
 
@@ -39,7 +45,8 @@ def get_all_robots():
             'rid': robot.id,
             'name': robot.name,
             'components': json.loads(robot.components),
-            'udp_url': robot.udp_url
+            'udp_url': robot.udp_url,
+            'stream_port': robot.stream_port
         })
     
     return { 'robots': result }
@@ -52,8 +59,22 @@ def get_specific_robot(rid):
         'rid': robot.id,
         'name': robot.name,
         'components': json.loads(robot.components),
-        'udp_url': robot.udp_url
+        'udp_url': robot.udp_url,
+        'stream_port': robot.stream_port
     }
+
+@aas_api.route('/api/robots/<rid>/video')
+def get_robot_video_feed(rid):
+    robot = models.Robot.query.filter_by(id=rid).first_or_404()
+    return {'url' : "http://localhost:" + str(robot.stream_port)}
+
+@aas_api.route('/api/availableport')
+def get_available_port():
+    port = models.StreamPort.query.filter_by(id="1").first_or_404()
+    return {
+        'port': port.available_port
+    }
+
 
 @aas_api.route('/api/stream')
 def stream():
@@ -75,11 +96,10 @@ def receive_command(cmd):
 
 @socketio.on('camera_event')
 def receive_camera_event(cmd):
-    middleware.send_to_camera(cmd['camera_event'])
+    robot = models.Robot.query.filter_by(id=cmd['rid']).first_or_404()
+    middleware.send_to_camera(cmd['camera_event'] + "," + cmd['rid'] + "," + robot.udp_url + "," + str(robot.stream_port))
 
 @socketio.on('click')
 def receive_click(msg):
     socketio.emit('event', msg, broadcast=True)
     print(request.headers)
-
-    

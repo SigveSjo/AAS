@@ -28,15 +28,28 @@ function reducer(state, action){
         name: action.name,
         components: action.components
       }
+    case 'camera_start':
+      return {
+        ...state,
+        streamURL: action.streamURL,
+        cameraButton: "Stop"
+      }
+    case 'camera_stop':
+      return {
+        ...state,
+        cameraButton: "Start"
+      }
   }
 }
 
 function KMR(props) {
-  const [cameraButton, setCameraButton] = useState("Start")
   const [robotState, dispatch] = useReducer(reducer, {
     rid: "",
-    components: {}
+    components: {},
+    cameraButton: "Start",
+    streamURL: null
   })
+
 
   const fetch = useCallback((rid) => {
     axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
@@ -63,11 +76,18 @@ function KMR(props) {
   }, [props.ws])
 
   const handleCameraEvent = (() => {
-    props.ws.emit("camera_event", {'camera_event': cameraButton})
-    if(cameraButton.localeCompare("STOP") == 0){
-      setCameraButton("START")
+    props.ws.emit("camera_event", {'camera_event': robotState.cameraButton, 'rid': props.robot.rid})
+    if(robotState.cameraButton.localeCompare("Stop") == 0){
+      dispatch({
+        type: 'camera_stop',
+      })
     } else {
-      setCameraButton("STOP")
+      axios.get(configs.API_URL + "api/robots/" + props.robot.rid + "/video").then(resp => {
+        dispatch({
+          type: 'camera_start',
+          streamURL: resp.data.url + "/video",
+        })
+      })
     }
   })
 
@@ -90,13 +110,13 @@ function KMR(props) {
             </Grid>
             <Grid>
               <Button onClick={handleCameraEvent}>
-                {cameraButton}
+                {robotState.cameraButton}
               </Button>
             </Grid>
             {
-              (cameraButton.localeCompare("STOP") == 0) &&
+              (robotState.cameraButton.localeCompare("Stop") == 0) &&
               <Grid item>
-                <img src={"http://localhost:8080/video"} width="200px" height="200px"/>
+                <img src={robotState.streamURL} width="200px" height="200px"/>
               </Grid>
             }
           </Grid>

@@ -111,7 +111,7 @@ function App(props) {
         <Grid container justify="center" className={classes.root}>
           {(state.robots || []).map((obj, index) => (
             <Grid item key={index} className={classes.card} xs={5} sm={4} md={3} lg={2}>
-              <Button onClick={handleComponentsOpen.bind(obj.rid, obj.name, obj.components)}>
+              <Button onClick={handleComponentsOpen.bind(obj, obj.rid, obj.name, obj.components)}>
                 <Entity 
                   rid={obj.rid}
                   name={obj.name}

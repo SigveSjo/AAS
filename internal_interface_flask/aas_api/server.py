@@ -71,7 +71,6 @@ class OpcuaServer:
     def update_status(self, parent, msg):
         rid, robot, component, component_status, *kwargs = msg.split(':')
 
-        print(msg.split(':'))
         """
             To facilitate the support for many different types of robots, 
             the Robot table cannot know about any specific components the robots
@@ -81,6 +80,8 @@ class OpcuaServer:
         """
         entry = models.Robot.query.filter_by(id=rid).first()
         if not entry:
+            port = models.StreamPort.query.filter_by(id="1").first()
+
             dump = {
                 component: bool(int(component_status))
             } 
@@ -89,10 +90,13 @@ class OpcuaServer:
                 id=rid, 
                 name=robot,
                 components=json.dumps(dump),
+                stream_port = port.available_port
             )
 
             if component == "camera":
                 new_robot.udp_url = kwargs[0] + ":" + kwargs[1]
+
+            port.available_port += 1
 
             self.db.session.add(new_robot)
         else:
