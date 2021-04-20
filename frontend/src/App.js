@@ -1,10 +1,10 @@
 // App.js
 import { useEffect, useState, useCallback, useReducer } from 'react'
+import { Grid, Button, withStyles, Backdrop, Modal, Fade } from '@material-ui/core'
 import DenseAppBar from './components/appbar'
 import Entity from './components/entity'
-import KMR from './components/kmr'
-import { Grid, Button, withStyles, Backdrop, Modal, Fade } from '@material-ui/core'
-import socketIOClient from "socket.io-client"
+import Robot from './components/robot'
+import socket from './websocket'
 import configs from './config.json'
 import axios from 'axios'
 
@@ -35,7 +35,6 @@ const styles = theme => ({
   }
 })
 
-const SOCKET_SERVER_URL = configs.API_URL
 const ROBOTS = ['KMR iiwa']
 
 function reducer(state, action) {
@@ -43,7 +42,6 @@ function reducer(state, action) {
     case 'setState':
       return {
         ...state,
-        websocket: action.websocket,
         robots: action.robots
       }
     case 'openModal':
@@ -69,39 +67,34 @@ function App(props) {
     robots: [],
     componentsOpen: false,
     activeRobotModal: {
-      rid: 0,
+      rid: "",
       name: "",
       components: []
     }
   })
 
-  const handleComponentsOpen = (rid, name, components) => {
-    dispatch({type: 'openModal', activeRobotModal: {
-      rid: rid,
-      name: name,
-      components: components 
-    }})
+  const handleComponentsOpen = (rid) => {
+    axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
+      dispatch({type: 'openModal', activeRobotModal: {
+        rid: resp.data.rid,
+        name: resp.data.name,
+        components: resp.data.components 
+      }})
+    })
   }
 
   const handleComponentsClose = () => {
     dispatch({type: 'closeModal'})
   }
 
-  const fetchAndSetState = useCallback((ws) => {
+  const fetchAndSetState = () => {
     axios.get(configs.API_URL + "api/robots").then(resp => {
-      dispatch({type: 'setState', websocket: ws, robots: resp.data.robots})
+      dispatch({type: 'setState', robots: resp.data.robots})
     })
-  }, [])
+  }
 
   useEffect(() => {
-    const socket = socketIOClient(SOCKET_SERVER_URL, {
-      transports: ['websocket'],
-      upgrade: false
-    })
-    socket.on('event', data => {
-      console.log(data)
-    })
-    fetchAndSetState(socket)
+    fetchAndSetState()
   }, [])
 
   const { classes } = props
@@ -111,27 +104,17 @@ function App(props) {
         <Grid container justify="center" className={classes.root}>
           {(state.robots || []).map((obj, index) => (
             <Grid item key={index} className={classes.card} xs={5} sm={4} md={3} lg={2}>
-              <Button onClick={handleComponentsOpen.bind(obj, obj.rid, obj.name, obj.components)}>
+              <Button onClick={handleComponentsOpen.bind(obj, obj.rid)}>
                 <Entity 
                   rid={obj.rid}
                   name={obj.name}
                   components={obj.components}
-                  ws={state.websocket}
+                  ws={socket}
                 />
               </Button>
             </Grid>
           ))}
         </Grid>
-        {
-          /*
-            <Grid>
-              <Button onClick={() => state.websocket.emit("click", "Hello from client!")}>
-                Click me!
-              </Button>
-            </Grid>
-          */
-        }
-        
         <Modal
           aria-labelledby="transition-modal-title"
           aria-describedby="transition-modal-description"
@@ -146,8 +129,7 @@ function App(props) {
         >
           <Fade in={state.componentsOpen}>
             <div className={classes.popup}>
-              {/*TODO: MAKE A MORE GENRAL COMPONENT THAT CAN HANDLE ANY ROBOT TYPE*/}
-              <KMR robot={state.activeRobotModal} ws={state.websocket} close={handleComponentsClose}/>  
+              <Robot robot={state.activeRobotModal} ws={socket} close={handleComponentsClose}/>  
             </div>
           </Fade>
         </Modal>  
