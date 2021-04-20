@@ -23,11 +23,11 @@ const styles = theme => ({
 function Entity(props) {
     const [status, setStatus] = useState("offline");
 
-    const fetch = useCallback((rid) => {
+    const fetch = (rid) => {
         axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
             setEntityStatus(resp.data.components)
         })
-    }, [])
+    }
 
     const setEntityStatus = useCallback((components) => {
         const statuses = Object.values(components)

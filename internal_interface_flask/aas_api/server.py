@@ -70,7 +70,7 @@ class OpcuaServer:
     @uamethod
     def update_status(self, parent, msg):
         rid, robot, component, component_status, *kwargs = msg.split(':')
-
+        
         """
             To facilitate the support for many different types of robots, 
             the Robot table cannot know about any specific components the robots
