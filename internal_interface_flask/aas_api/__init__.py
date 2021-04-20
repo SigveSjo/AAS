@@ -66,7 +66,10 @@ def get_specific_robot(rid):
 @aas_api.route('/api/robots/<rid>/video')
 def get_robot_video_feed(rid):
     robot = models.Robot.query.filter_by(id=rid).first_or_404()
-    return {'url' : "http://localhost:" + str(robot.stream_port)}
+    ip_with_wrong_port = str(ip_dict["SERVER_URL"])
+    ip = ip_with_wrong_port.split(":")[0]
+
+    return {'url' : "http://" + ip + ":" + str(robot.stream_port)}
 
 @aas_api.route('/api/availableport')
 def get_available_port():
