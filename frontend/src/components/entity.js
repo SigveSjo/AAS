@@ -30,6 +30,7 @@ function Entity(props) {
     }
 
     const setEntityStatus = useCallback((components) => {
+        console.log(components)
         const statuses = Object.values(components)
         if(statuses.includes(true)){
             setStatus("online")
@@ -67,7 +68,6 @@ function Entity(props) {
                     <h3> Status: <div color="secondary"> {status} </div> </h3>
                 </Grid>
             </Grid>
-            
         </Paper>
     )
 }

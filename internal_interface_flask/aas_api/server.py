@@ -4,26 +4,8 @@ import logging
 from opcua import ua, Server, uamethod
 from aas_api import models
 
-# Video stream
-from cv2 import cv2 as cv
-import numpy as np
-
-class FrameProdCon:
-    def __init__(self, vf_queue):
-        self.vf_queue = vf_queue
-
-    #Producer
-    def generate(self):
-        for val in iter(self.vf_queue.get, None):
-            yield val
-
-    #Consumer
-    def response(self):
-        return Response(self.generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
-
 class OpcuaServer:
-    def __init__(self, opcua_address, socketio, db, vf_queue):
-        self.vf_queue = vf_queue
+    def __init__(self, opcua_address, socketio, db):
         self.socketio = socketio
         self.db = db
 
@@ -46,7 +28,6 @@ class OpcuaServer:
 
         # add server methods
         status_node = myobj.add_method(idx, "update_status", self.update_status, [ua.VariantType.String], [ua.VariantType.Int64])
-        #image_node = myobj.add_method(idx, "update_frame",  self.update_frame)
         
         lbrEvent = server.create_custom_event_type(idx, 'LBREvent')
         kmpEvent = server.create_custom_event_type(idx, 'KMPEvent')
@@ -58,14 +39,6 @@ class OpcuaServer:
         
         # starting!
         server.start()
-
-    @uamethod
-    async def update_frame(self, parent, bytes):     
-        byte_frame = BytesIO(bytes)
-        loaded_frame = np.load(byte_frame, allow_pickle=True)
-        flag, encoded_image = cv.imencode(".jpg", loaded_frame)
-
-        await self.vf_queue.put((b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encoded_image) + b'\r\n'))
     
     @uamethod
     def update_status(self, parent, msg):

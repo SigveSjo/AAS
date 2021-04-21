@@ -27,9 +27,7 @@ db.session.commit()
 with open("config.json", "r") as f:
     ip_dict = json.load(f)
 
-video_feed_queue = Queue(maxsize=5)
-sender = server.FrameProdCon(video_feed_queue)
-middleware = server.OpcuaServer(ip_dict["OPCUA_URL"], socketio, db, video_feed_queue)
+middleware = server.OpcuaServer(ip_dict["OPCUA_URL"], socketio, db)
 
 ### ROUTES ###
 @aas_api.route('/')
@@ -77,11 +75,6 @@ def get_available_port():
     return {
         'port': port.available_port
     }
-
-
-@aas_api.route('/api/stream')
-def stream():
-    return sender.response()
 
 
 ### WEBSOCKET IMPLEMENTATION ###
