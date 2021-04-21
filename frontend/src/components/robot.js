@@ -37,7 +37,7 @@ function reducer(state, action){
 function Robot(props) {
   const [robotState, dispatch] = useReducer(reducer, {
     components: {},
-    cameraButton: "Start",
+    cameraButton: localStorage.getItem('camera_opened_' + props.robot.rid) || "Start",
     streamURL: null
   })
 
@@ -61,13 +61,16 @@ function Robot(props) {
       dispatch({
         type: 'camera_stop',
       })
+      localStorage.setItem('camera_opened_' + props.robot.rid, "Start");
     } else {
       axios.get(configs.API_URL + "api/robots/" + props.robot.rid + "/video").then(resp => {
         dispatch({
           type: 'camera_start',
           streamURL: resp.data.url + "/video",
         })
+        localStorage.setItem('camera_stream_url_' + props.robot.rid, resp.data.url + "/video");
       })
+      localStorage.setItem('camera_opened_' + props.robot.rid, "Stop");
     }
   })
 
@@ -92,6 +95,7 @@ function Robot(props) {
     <div className={classes.paper}>
       <ModalAppBar close={props.close}/>
       <RobotComponents 
+        rid={props.robot.rid}
         name={props.robot.name}
         ws={props.ws}
         state={robotState}

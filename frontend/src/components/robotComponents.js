@@ -14,6 +14,8 @@ const styles = theme => ({
 function RobotComponents(props) {
 
     const { classes } = props
+    const DEFAULT_IMG="http://i.imgur.com/lL3LtFD.jpg"
+
     return (
         <Grid container className={classes.root} spacing={2}>
             <Grid item xs={12}>
@@ -46,7 +48,7 @@ function RobotComponents(props) {
                 {
                     (props.state.cameraButton.localeCompare("Stop") == 0) &&
                     <Grid item>
-                        <img src={props.state.streamURL} width="200px" height="200px"/>
+                        <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} width="480px" height="360px" onError={(e)=>{e.target.src=DEFAULT_IMG}}/>
                     </Grid>
                 }
             </Grid>
