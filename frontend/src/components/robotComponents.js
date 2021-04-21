@@ -27,10 +27,10 @@ function RobotComponents(props) {
                             <KMRGeneralCommands ws={props.ws}/>
                         </Grid>
                         <Grid item>
-                            <KMPController ws={props.ws} status={props.state.components.kmp}/>
+                            <KMPController ws={props.ws} status={props.state.components.kmp} rid={props.rid}/>
                         </Grid>
                         <Grid item>
-                            <LBRController ws={props.ws} status={props.state.components.lbr}/>
+                            <LBRController ws={props.ws} status={props.state.components.lbr} rid={props.rid}/>
                         </Grid>
                     </Grid>
                 }

@@ -88,7 +88,7 @@ def disconnect():
 
 @socketio.on('command')
 def receive_command(cmd):
-    middleware.send_to_entity(cmd['command'])
+    middleware.send_to_entity(cmd['command'] + "," + cmd['rid'])
 
 @socketio.on('camera_event')
 def receive_camera_event(cmd):

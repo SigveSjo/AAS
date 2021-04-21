@@ -21,7 +21,7 @@ function LBRController(props) {
     const [enabled, setEnabled] = useState(false)
 
     const moveLBR = (joint, direction) => {
-        props.ws.emit('command', { "command" : "lbr:" + joint + " " + direction })
+        props.ws.emit('command', { "command" : "lbr:" + joint + " " + direction, 'rid': props.rid})
     }
 
     useEffect(() => {

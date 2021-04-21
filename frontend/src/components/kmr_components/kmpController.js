@@ -48,7 +48,7 @@ function KMPController(props) {
             vector = " 0 0 0"
         }
         
-        props.ws.emit('command', { "command" : "kmp:" + speed + vector })
+        props.ws.emit('command', { "command" : "kmp:" + speed + vector, 'rid': props.rid})
     }
     const defaultColor = "white"
     const pressColor = "gray"
