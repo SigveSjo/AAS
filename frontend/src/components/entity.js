@@ -30,7 +30,6 @@ function Entity(props) {
     }
 
     const setEntityStatus = useCallback((components) => {
-        console.log(components)
         const statuses = Object.values(components)
         if(statuses.includes(true)){
             setStatus("online")

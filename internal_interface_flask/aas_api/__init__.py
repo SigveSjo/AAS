@@ -47,7 +47,9 @@ def get_all_robots():
             'stream_port': robot.stream_port
         })
     
-    return { 'robots': result }
+    return { 
+        'robots': result 
+    }
 
 @aas_api.route('/api/robots/<rid>')
 def get_specific_robot(rid):
@@ -67,7 +69,9 @@ def get_robot_video_feed(rid):
     ip_with_wrong_port = str(ip_dict["SERVER_URL"])
     ip = ip_with_wrong_port.split(":")[0]
 
-    return {'url' : "http://" + ip + ":" + str(robot.stream_port)}
+    return {
+        'url' : "http://" + ip + ":" + str(robot.stream_port)
+    }
 
 @aas_api.route('/api/availableport')
 def get_available_port():

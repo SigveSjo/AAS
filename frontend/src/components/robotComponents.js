@@ -1,27 +1,46 @@
-import { Grid, withStyles, Button } from '@material-ui/core'
+import { useState } from 'react';
+import { Grid, withStyles, Button, Grow } from '@material-ui/core'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import KMRGeneralCommands from './kmr_components/kmrGeneralCommands'
 import KMPController from './kmr_components/kmpController'
 import LBRController from './kmr_components/lbrController'
-import { TextsmsTwoTone } from '@material-ui/icons'
 
 const styles = theme => ({
     root: {
       flexGrow: 1,
       padding: theme.spacing(2,4,3),
       borderRadius: 2,
+    },
+    loading: {
+        position: 'absolute',
+    },
+    imageLoading: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    progress: {
+        color: '#f37a00',
     }
   })
 
 function RobotComponents(props) {
+    const [loading, setLoading] = useState(false)
 
-    const { classes } = props
-
-    const setSrc = (e) => {
-        setTimeout(() => {  e.target.src=localStorage.getItem('camera_stream_url_' + props.rid) }, 1500);
+    const handleLoad = (e) => {
+        setLoading(false)
     }
 
+    const setSrc = (e) => {
+        setLoading(true)
+        setTimeout(() => { 
+            e.target.src=localStorage.getItem('camera_stream_url_' + props.rid)
+        }, 1500);
+    }
+    
+    const { classes } = props
     return (
-        <Grid container className={classes.root} spacing={2}>
+        <Grid container className={classes.root} spacing={3}>
             <Grid item xs={12}>
                 {
                     // KMR iiwa components
@@ -44,6 +63,7 @@ function RobotComponents(props) {
                 }
             </Grid>
             <Grid item>
+
                 <Grid>
                     <Button onClick={props.handleCameraEvent}>
                         {props.state.cameraButton}
@@ -51,8 +71,22 @@ function RobotComponents(props) {
                 </Grid>
                 {
                     (props.state.cameraButton.localeCompare("Stop") == 0) &&
-                    <Grid item>
-                        <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} width="480px" height="360px" onError={(e)=>{setSrc(e)}}/>
+                    <Grid> 
+                        <div className={classes.imageLoading}>
+                            {
+                                loading &&
+                                <div className={classes.loading}>
+                                    <CircularProgress 
+                                        className={classes.progress}
+                                        size={100}
+                                        thickness={4}
+                                    />
+                                </div>
+                            }
+                            <div className={classes.image}>
+                                <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} width="200px" height="200px" onError={(e)=>{setSrc(e)}} onLoad={()=>{handleLoad()}}/>
+                            </div>
+                        </div>
                     </Grid>
                 }
             </Grid>
