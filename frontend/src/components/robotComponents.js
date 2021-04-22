@@ -2,6 +2,7 @@ import { Grid, withStyles, Button } from '@material-ui/core'
 import KMRGeneralCommands from './kmr_components/kmrGeneralCommands'
 import KMPController from './kmr_components/kmpController'
 import LBRController from './kmr_components/lbrController'
+import { TextsmsTwoTone } from '@material-ui/icons'
 
 const styles = theme => ({
     root: {
@@ -14,7 +15,10 @@ const styles = theme => ({
 function RobotComponents(props) {
 
     const { classes } = props
-    const DEFAULT_IMG="http://i.imgur.com/lL3LtFD.jpg"
+
+    const setSrc = (e) => {
+        setTimeout(() => {  e.target.src=localStorage.getItem('camera_stream_url_' + props.rid) }, 1500);
+    }
 
     return (
         <Grid container className={classes.root} spacing={2}>
@@ -48,7 +52,7 @@ function RobotComponents(props) {
                 {
                     (props.state.cameraButton.localeCompare("Stop") == 0) &&
                     <Grid item>
-                        <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} width="480px" height="360px" onError={(e)=>{e.target.src=DEFAULT_IMG}}/>
+                        <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} width="480px" height="360px" onError={(e)=>{setSrc(e)}}/>
                     </Grid>
                 }
             </Grid>
