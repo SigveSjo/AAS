@@ -35,6 +35,7 @@ function RobotComponents(props) {
                                 rid={props.rid}
                                 state={props.state}
                                 handleCameraEvent={props.handleCameraEvent}
+                                handleCameraIconEvent={props.handleCameraIconEvent}
                             />
                         </Grid>
                         <Grid item>

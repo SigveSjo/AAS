@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Paper, withStyles, Button, Grow, Grid, IconButton } from '@material-ui/core'
+import { Paper, withStyles, Button, IconButton } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Tooltip from '@material-ui/core/Tooltip'
 import Videocam from '@material-ui/icons/Videocam'
@@ -24,7 +24,6 @@ const styles = theme => ({
 
 function VideoComponent(props) {
     const [loading, setLoading] = useState(false)
-    const [cameraStatus, setCameraStatus] = useState(false)
 
     const handleLoad = (e) => {
         setLoading(false)
@@ -37,44 +36,43 @@ function VideoComponent(props) {
             e.target.src=localStorage.getItem('camera_stream_url_' + props.rid)
         }, 1500);
     }
-
-    const handleImageEvent = () => {
-        setCameraStatus(!cameraStatus)
-    }
     
     const { classes } = props
     return (
         <Paper className={classes.padding}>
             <Button onClick={props.handleCameraEvent} variant="outlined" color="primary" style={{ textTransform: "none" }}>
-                {props.state.cameraButton} video feed
+                {props.state.cameraButton} video stream
             </Button>
-                <IconButton onClick={handleImageEvent}>
-                    <Tooltip title={cameraStatus ? "Close video window" : "Open video window"}>
-                    {
-                        cameraStatus ?
-                        <VideocamOff fontSize="large" color="primary"/>
-                        :
-                        <Videocam fontSize="large" color="primary"/>
-                    }
-                    </Tooltip>
-                </IconButton>
+            <IconButton onClick={props.handleCameraIconEvent}>
+                <Tooltip title={props.state.cameraIconButton ? "Close video window" : "Open video window"}>
+                {
+                    props.state.cameraIconButton ?
+                    <VideocamOff fontSize="large" color="primary"/>
+                    :
+                    <Videocam fontSize="large" color="primary"/>
+                }
+                </Tooltip>
+            </IconButton>
             {
                 (props.state.cameraButton.localeCompare("Stop") == 0) &&
-                <div className={classes.container}>
-                    {
-                        loading &&
-                        <div className={classes.loading}>
-                            <CircularProgress 
-                                className={classes.progress}
-                                size={120}
-                                thickness={2}
-                                />
+                [
+                    props.state.cameraIconButton &&
+                    <div className={classes.container}>
+                        {
+                            loading &&
+                            <div className={classes.loading}>
+                                <CircularProgress 
+                                    className={classes.progress}
+                                    size={120}
+                                    thickness={2}
+                                    />
+                            </div>
+                        }
+                        <div style={{display: loading ? "none" : "block"}}>
+                            <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} onError={(e)=>{setSrc(e)}} onLoad={(e)=>{handleLoad(e)}}/>
                         </div>
-                    }
-                    <div style={{display: loading ? "none" : "block"}}>
-                        <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} onError={(e)=>{setSrc(e)}} onLoad={(e)=>{handleLoad(e)}}/>
                     </div>
-                </div>
+                ]
             }
             {
             /*

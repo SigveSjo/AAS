@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
-import Home from '@material-ui/icons/Home';
+import React, { useState } from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import IconButton from '@material-ui/core/IconButton'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import Slide from '@material-ui/core/Slide'
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
+import Home from '@material-ui/icons/Home'
 import axios from 'axios'
 import configs from '../config.json'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  return <Slide direction="up" ref={ref} {...props} />
+})
 
 const API_URL = configs.API_URL + "commands/"
 
@@ -35,7 +35,7 @@ const styles = theme => ({
   tool: {
     justifyContent: 'center',
   }
-});
+})
 
 function ModalAppBar(props) {
   const [alertOpen, setAlertOpen] = useState(false)
@@ -54,10 +54,10 @@ function ModalAppBar(props) {
   }
 
   const shutdownClicked = () => {
-    console.log("Shutting down KMR iiwa");
+    console.log("Shutting down KMR iiwa")
   
-    axios.post(API_URL, { "command" : "lbr:shutdown"});
-    axios.post(API_URL, { "command" : "kmp:shutdown"});
+    axios.post(API_URL, { "command" : "lbr:shutdown"})
+    axios.post(API_URL, { "command" : "kmp:shutdown"})
   }
   
   const { classes } = props
@@ -116,7 +116,7 @@ function ModalAppBar(props) {
         </Toolbar>
       </AppBar>
     </div>
-  );
+  )
 }
 
 export default withStyles(styles)(ModalAppBar)

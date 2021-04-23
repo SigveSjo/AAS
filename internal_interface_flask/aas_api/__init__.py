@@ -29,7 +29,7 @@ with open("config.json", "r") as f:
 
 middleware = server.OpcuaServer(ip_dict["OPCUA_URL"], socketio, db)
 
-### ROUTES ###
+### REST API IMPLEMENTATION ###
 @aas_api.route('/')
 def index():
     return "Hello World!"
