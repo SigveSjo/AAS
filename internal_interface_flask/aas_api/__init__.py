@@ -1,17 +1,19 @@
 import json
 from queue import Queue
+from config import Config
 
 # Flask
-from flask import Flask, Response, render_template, request, jsonify
-from config import Config
+from flask import Flask, Response, render_template, request, jsonify, abort
+from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_socketio import SocketIO, emit
 from flask_cors import CORS
 
 aas_api = Flask(__name__)
-CORS(aas_api)
 aas_api.config.from_object(Config)
+CORS(aas_api)
+bcrypt = Bcrypt(aas_api)
 db = SQLAlchemy(aas_api)
 migrate = Migrate(aas_api, db)
 socketio = SocketIO(aas_api, cors_allowed_origins="*")
@@ -33,6 +35,24 @@ middleware = server.OpcuaServer(ip_dict["OPCUA_URL"], socketio, db)
 @aas_api.route('/')
 def index():
     return "Hello World!"
+
+@aas_api.route('/api/login', methods=['POST'])
+def attempt_login():
+    try:
+        correct_user = None
+        content = request.get_json()
+        users = models.User.query.filter_by(username=content.get('username')).all()
+        for u in users:
+            if bcrypt.check_password_hash(u.password, content.get('password')):
+                correct_user = u
+                break
+        return {
+            'username': correct_user.username,
+            'admin': correct_user.admin,
+            'operator': correct_user.operator
+        }
+    except:
+        abort(404)
 
 @aas_api.route('/api/robots')
 def get_all_robots():
