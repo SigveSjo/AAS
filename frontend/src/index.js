@@ -7,7 +7,7 @@ import Routes from './Routes';
 import reportWebVitals from './reportWebVitals';
 import history from './history';
 
-history.push('/home')
+history.push('/login')
 
 ReactDOM.render(
  

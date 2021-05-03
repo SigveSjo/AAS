@@ -1,10 +1,8 @@
-import React, { useEffect, useState} from 'react'
+import React, { useEffect, useCallback, useState} from 'react'
 import { Paper, withStyles, Grid} from '@material-ui/core'
 import kmr from '../resources/images/kmriiwa.png'
-import { Adjust } from '@material-ui/icons'
 import axios from 'axios'
 import configs from '../config.json'
-//import Sarus from '@anephenix/sarus'
 
 
 const styles = theme => ({
@@ -13,39 +11,62 @@ const styles = theme => ({
     },
     padding: {
         padding: theme.spacing(1)
+    },
+    image: {
+        flex: 1,
+        width: 200,
+        height: 200,
+        resizeMode: "contain",
     }
-});
+})
 
 function Entity(props) {
-
     const [status, setStatus] = useState("offline");
 
-    useEffect(() => {
-        axios.get(configs.API_URL + "robots/1").then(resp => {
-            if(resp.data.name == "KMR" && (resp.data.kmp || resp.data.lbr)){
-                setStatus("online")
-            }
-            else{
-                setStatus("offline")
-            }
-        });
-    })
+    const fetch = (rid) => {
+        axios.get(configs.API_URL + "api/robots/" + rid).then(resp => {
+            setEntityStatus(resp.data.components)
+        })
+    }
 
+    const setEntityStatus = useCallback((components) => {
+        const statuses = Object.values(components)
+        if(statuses.includes(true)){
+            setStatus("online")
+            return
+        }
+        setStatus("offline")
+    }, [])
+
+    useEffect(() => {
+        setEntityStatus(props.components)
+        try{
+            props.ws.on('status', data => {
+                const object = JSON.parse(data)
+                if(object.rid === props.rid){
+                    fetch(object.rid)
+                }
+            })
+        } catch (e){
+            console.log("Websocket is not connected!")
+        }
+    }, [props.ws])
+
+    
     const { classes } = props
     return (
         <Paper className={classes.padding}>
             <Grid container justify="center">
-                <h1> KMR iiwa #1 </h1>
+                <h2> {props.name} (RID: {props.rid}) </h2>
             </Grid>
             <div>
-                <img src={kmr} />
+                <img className={classes.image} src={kmr} />
             </div>
             <Grid container justify="center" style={{ marginTop: '10px' }}>
                 <Grid>
                     <h3> Status: <div color="secondary"> {status} </div> </h3>
                 </Grid>
             </Grid>
-            
         </Paper>
     )
 }

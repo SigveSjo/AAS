@@ -1,36 +1,52 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
+import React from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import IconButton from '@material-ui/core/IconButton'
+import history from './../history'
 
-const useStyles = makeStyles((theme) => ({
+const styles = theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
-
   theme: {
-    background: '#f37a00'
+    background: '#f37a00',
+  },
+  username: {
+    marginLeft: 'auto'
+  }
+})
+
+function DenseAppBar(props) {
+
+  const handleLogout = () => {
+    localStorage.clear()
+    history.push('/login')
   }
 
-}));
-
-export default function DenseAppBar() {
-  const classes = useStyles();
-
+  const { classes } = props
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.theme}>
+      <AppBar className={classes.theme}>
         <Toolbar variant="dense">
           <Typography variant="h6" color="inherit">
             AAS Interface
           </Typography>
+          <Typography variant="h6" color="inherit" className={classes.username}>
+            {localStorage.getItem('username')}
+          </Typography>
+          <IconButton color="inherit" onClick={handleLogout}>
+            <ExitToAppIcon/>
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>
-  );
+  )
 }
+
+export default withStyles(styles)(DenseAppBar)

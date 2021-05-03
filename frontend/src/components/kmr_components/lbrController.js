@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Paper, withStyles, Grid, Button, Slider } from '@material-ui/core';
 import { Add, Remove } from '@material-ui/icons'
 import axios from 'axios';
-import lbr_image from '../resources/images/lbr.png'
-import configs from '../config.json'
+import lbr_image from '../../resources/images/lbr.png'
+import configs from '../../config.json'
 
 const styles = theme => ({
     margin: {
@@ -18,19 +18,19 @@ const styles = theme => ({
 });
 
 function LBRController(props) {
-
-    const moveLBR = (joint, direction) => {
-        axios.post(configs.API_URL + "commands/", { "command" : "lbr:" + joint + " " + direction})
-    }
-
     const [enabled, setEnabled] = useState(false)
 
-    axios.get(configs.API_URL + "robots/1").then(resp => {
-        setEnabled(resp.data.lbr)
-    });
+    const moveLBR = (joint, direction) => {
+        props.ws.emit('command', { "command" : "lbr:" + joint + " " + direction, 'rid': props.rid})
+    }
+
+    useEffect(() => {
+        if(localStorage.getItem('operator') === 'true'){
+            setEnabled(props.status)
+        }
+    })
      
     const { classes } = props;
-
     return (
         <Paper className={classes.padding}>
             <Grid container justify="center">
