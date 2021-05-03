@@ -145,7 +145,7 @@ function reducer(state, action){
     const { classes } = props
     return (
       <div className={classes.paper}>
-        <ModalAppBar close={props.close}/>
+        <ModalAppBar ws={props.ws} close={props.close}/>
         <RobotComponents 
           rid={props.robot.rid}
           name={props.robot.name}
