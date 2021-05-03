@@ -13,10 +13,12 @@ const styles = theme => ({
 
 function KMPController(props) {
     const [speed, setSpeed] = useState(0.1)
-    const [enabled, setEnabled] = useState(true)
+    const [enabled, setEnabled] = useState(false)
 
     useEffect(() => {
-        setEnabled(props.status)
+        if(localStorage.getItem('operator') === 'true'){
+            setEnabled(props.status)
+        }
     })
 
     const handleOnChangeSpeed = (event, newValue) => {
@@ -61,68 +63,72 @@ function KMPController(props) {
     const [clockwiseColor, setClockwiseColor] = useState(defaultColor)
 
     document.onkeydown = function(event) {
-        if (event.key == 'ArrowUp' && upColor==defaultColor) {
-            moveKMP("up")
-            console.log("ArrowUp pressed")
-            setUpColor(pressColor)
-        }
-        if (event.key == 'ArrowDown' && downColor==defaultColor) {
-            moveKMP("down")
-            console.log("ArrowDown pressed")
-            setDownColor(pressColor)
-        }
-        if (event.key == 'ArrowLeft' && leftColor==defaultColor) {
-            moveKMP("left")
-            console.log("ArrowLeft pressed")
-            setLeftColor(pressColor)
-        }
-        if (event.key == 'ArrowRight' && rightColor==defaultColor) {
-            moveKMP("right")
-            console.log("ArrowRight pressed")
-            setRightColor(pressColor)
-        }
-        if (event.key == 'o' && counterClockwiseColor==defaultColor) {
-            moveKMP("counter-clockwise")
-            console.log("CounterClockwise pressed")
-            setCounterClockwiseColor(pressColor)
-        }
-        if (event.key == 'p' && clockwiseColor==defaultColor) {
-            moveKMP("clockwise")
-            console.log("clockwise pressed")
-            setClockwiseColor(pressColor)
+        if (localStorage.getItem('operator') === 'true' && enabled) {
+            if (event.key == 'ArrowUp' && upColor==defaultColor) {
+                moveKMP("up")
+                console.log("ArrowUp pressed")
+                setUpColor(pressColor)
+            }
+            if (event.key == 'ArrowDown' && downColor==defaultColor) {
+                moveKMP("down")
+                console.log("ArrowDown pressed")
+                setDownColor(pressColor)
+            }
+            if (event.key == 'ArrowLeft' && leftColor==defaultColor) {
+                moveKMP("left")
+                console.log("ArrowLeft pressed")
+                setLeftColor(pressColor)
+            }
+            if (event.key == 'ArrowRight' && rightColor==defaultColor) {
+                moveKMP("right")
+                console.log("ArrowRight pressed")
+                setRightColor(pressColor)
+            }
+            if (event.key == 'o' && counterClockwiseColor==defaultColor) {
+                moveKMP("counter-clockwise")
+                console.log("CounterClockwise pressed")
+                setCounterClockwiseColor(pressColor)
+            }
+            if (event.key == 'p' && clockwiseColor==defaultColor) {
+                moveKMP("clockwise")
+                console.log("clockwise pressed")
+                setClockwiseColor(pressColor)
+            }
         }
     }
 
     document.onkeyup = function(event) {
-        if (event.key == 'ArrowUp') {
-            moveKMP("stop")
-            console.log("ArrowUp released")
-            setUpColor(defaultColor)
-        }
-        if (event.key == 'ArrowDown') {
-            moveKMP("stop")
-            console.log("ArrowDown released")
-            setDownColor(defaultColor)
-        }
-        if (event.key == 'ArrowLeft') {
-            moveKMP("stop")
-            console.log("ArrowLeft released")
-            setLeftColor(defaultColor)
-        }
-        if (event.key == 'ArrowRight') {
-            moveKMP("stop")
-            console.log("ArrowRight released")
-            setRightColor(defaultColor)
-        }
-        if (event.key == 'o') {
-            moveKMP("stop")
-            console.log("CounterClockwise released")
-            setCounterClockwiseColor(defaultColor)
-        }
-        if (event.key == 'p') {
-            moveKMP("stop")
-            console.log("clockwise released")
-            setClockwiseColor(defaultColor)
+        if (localStorage.getItem('operator') === 'true' && enabled) {
+            if (event.key == 'ArrowUp') {
+                moveKMP("stop")
+                console.log("ArrowUp released")
+                setUpColor(defaultColor)
+            }
+            if (event.key == 'ArrowDown') {
+                moveKMP("stop")
+                console.log("ArrowDown released")
+                setDownColor(defaultColor)
+            }
+            if (event.key == 'ArrowLeft') {
+                moveKMP("stop")
+                console.log("ArrowLeft released")
+                setLeftColor(defaultColor)
+            }
+            if (event.key == 'ArrowRight') {
+                moveKMP("stop")
+                console.log("ArrowRight released")
+                setRightColor(defaultColor)
+            }
+            if (event.key == 'o') {
+                moveKMP("stop")
+                console.log("CounterClockwise released")
+                setCounterClockwiseColor(defaultColor)
+            }
+            if (event.key == 'p') {
+                moveKMP("stop")
+                console.log("clockwise released")
+                setClockwiseColor(defaultColor)
+            }
         }
     }
 

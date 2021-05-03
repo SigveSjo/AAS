@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Paper, withStyles, Grid, TextField, Button } from '@material-ui/core'
 import { SportsEsports} from '@material-ui/icons'
 import axios from 'axios'
@@ -18,6 +18,13 @@ const API_URL = configs.API_URL + "commands/"
 
 function KMRGeneralCommands(props) {
     const [value, setValue] = useState("")
+    const [enabled, setEnabled] = useState(false)
+
+    useEffect(() => {
+        if(localStorage.getItem('operator') === 'true'){
+            setEnabled(true)
+        }
+    })
 
     const handleOnChange = (event) => {
         setValue(event.target.value)
@@ -44,13 +51,13 @@ function KMRGeneralCommands(props) {
                         <SportsEsports />
                     </Grid>
                     <Grid item md={true} sm={true} xs={true}>
-                        <TextField onChange={handleOnChange} id="kmr" type="string" fullWidth autoFocus label="KMR iiwa command"/>
+                        <TextField onChange={handleOnChange} id="kmr" type="string" fullWidth autoFocus label="KMR iiwa command" disabled={!enabled}/>
                     </Grid>
                 </Grid>
                 <Grid container alignItems="center" justify="space-between">
                 </Grid>
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
-                    <Button onClick={buttonClicked} variant="outlined" color="primary" style={{ textTransform: "none" }}>Send</Button>
+                    <Button onClick={buttonClicked} variant="outlined" color="primary" disabled={!enabled} style={{ textTransform: "none" }}>Send</Button>
                 </Grid>
             </div>
         </Paper>

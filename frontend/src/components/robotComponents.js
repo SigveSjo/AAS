@@ -48,36 +48,6 @@ function RobotComponents(props) {
                     // (INSERT ROBOT HERE) components
                 }
             </Grid>
-            {
-                /*
-                <Grid item>
-    
-                    <Grid>
-                        <Button onClick={props.handleCameraEvent}>
-                            {props.state.cameraButton}
-                        </Button>
-                    </Grid>
-                    {
-                        (props.state.cameraButton.localeCompare("Stop") == 0) &&
-                        <Grid> 
-                            <div className={classes.imageLoading}>
-                                {
-                                    loading &&
-                                    <div className={classes.loading}>
-                                        <CircularProgress 
-                                            className={classes.progress}
-                                        />
-                                    </div>
-                                }
-                                <div className={classes.image}>
-                                    <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} width="200px" height="200px" onError={(e)=>{setSrc(e)}} onLoad={()=>{handleLoad()}}/>
-                                </div>
-                            </div>
-                        </Grid>
-                    }
-                </Grid>
-                */
-            }
         </Grid>
     )
 }

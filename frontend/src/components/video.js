@@ -74,37 +74,6 @@ function VideoComponent(props) {
                     </div>
                 ]
             }
-            {
-            /*
-            <Grid container>
-                <Grid item>
-                    <Button onClick={props.handleCameraEvent}>
-                        {props.state.cameraButton}
-                    </Button>
-                </Grid>
-                <Grid item>
-                    {
-                        (props.state.cameraButton.localeCompare("Stop") == 0) &&
-                        <Grid container justify="flex-start" alignItems="flex-start">
-                            <Grid item className={classes.loading}>
-                                {
-                                    loading &&
-                                    <CircularProgress 
-                                        className={classes.progress}
-                                        size={150}
-                                        thickness={4}
-                                    />
-                                }
-                            </Grid>
-                            <Grid item className={classes.image} justify="flex-start">
-                                <img src={props.state.streamURL || localStorage.getItem('camera_stream_url_' + props.rid)} onError={(e)=>{setSrc(e)}} onLoad={()=>{handleLoad()}}/>
-                            </Grid>
-                        </Grid>
-                    }
-                </Grid>
-            </Grid>
-            */
-            }
         </Paper>
     )
 }

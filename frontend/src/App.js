@@ -12,6 +12,7 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     padding: theme.spacing(10,0,0),
+    height: '100vh',
   },
   card: {
     margin: theme.spacing(3),

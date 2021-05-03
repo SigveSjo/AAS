@@ -25,7 +25,9 @@ function LBRController(props) {
     }
 
     useEffect(() => {
-        setEnabled(props.status)
+        if(localStorage.getItem('operator') === 'true'){
+            setEnabled(props.status)
+        }
     })
      
     const { classes } = props;

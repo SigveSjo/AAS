@@ -170,7 +170,7 @@ function reducer(state, action){
             <Button onClick={handleAlertClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={handleCameraClose} color="primary">
+            <Button onClick={handleCameraClose} color="primary" disabled={!(localStorage.getItem('admin') === 'true')}>
               (Admin) Stop video stream
             </Button>
           </DialogActions>

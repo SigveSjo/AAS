@@ -108,8 +108,8 @@ function ModalAppBar(props) {
               <Button onClick={handleAlertClose} color="primary">
                 Cancel
               </Button>
-              <Button onClick={handleShutdown} color="primary">
-                Shut down
+              <Button onClick={handleShutdown} color="primary" disabled={!(localStorage.getItem('admin') === 'true')}>
+                (ADMIN) Shut down
               </Button>
             </DialogActions>
           </Dialog>

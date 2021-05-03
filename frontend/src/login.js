@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { Grid, Paper, withStyles, Button } from "@material-ui/core"
 import IconButton from '@material-ui/core/IconButton'
 import OutlinedInput from '@material-ui/core/OutlinedInput'
@@ -69,6 +69,15 @@ function Login(props) {
         password: '',
         showPassword: false,
     })
+
+    useEffect(() => {
+        let username = localStorage.getItem('username')
+        let admin = localStorage.getItem('admin')
+        let operator = localStorage.getItem('operator')
+        if(username !== null && admin !== null && operator !== null){
+            history.push('/dashboard')
+        }
+    }, [])
 
     const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value })
