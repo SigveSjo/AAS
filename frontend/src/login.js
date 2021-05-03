@@ -113,6 +113,12 @@ function Login(props) {
         dispatch({type: 'close'});
     }
 
+    const handleEnter = (e) => {
+        if(e.key === 'Enter'){
+            handleLoginButtonClicked()
+         }
+    }
+
     const { classes } = props
     return (
         <div className={classes.root}>
@@ -131,6 +137,7 @@ function Login(props) {
                                         type={'text'}
                                         value={values.username}
                                         onChange={handleChange('username')}
+                                        onKeyDown={handleEnter}
                                         labelWidth={70}
                                     />
                                 </FormControl>
@@ -143,6 +150,7 @@ function Login(props) {
                                         type={values.showPassword ? 'text' : 'password'}
                                         value={values.password}
                                         onChange={handleChange('password')}
+                                        onKeyDown={handleEnter}
                                         endAdornment={
                                         <InputAdornment position="end">
                                             <IconButton

@@ -116,8 +116,7 @@ def receive_command(cmd):
 
 @socketio.on('camera_event')
 def receive_camera_event(cmd):
-    robot = models.Robot.query.filter_by(id=cmd['rid']).first_or_404()
-    middleware.send_to_camera(cmd['camera_event'] + "," + cmd['rid'] + "," + robot.udp_url + "," + str(robot.stream_port))
+    middleware_send_camera_event(cmd)
 
 @socketio.on('click')
 def receive_click(msg):
@@ -126,8 +125,11 @@ def receive_click(msg):
 
 @socketio.on('shutdown')
 def receive_shutdown(cmd):
-    robot = models.Robot.query.filter_by(id=cmd['rid']).first_or_404()
     middleware.send_to_entity('lbr:shutdown' + "," + cmd['rid'])
     middleware.send_to_entity('kmp:shutdown' + "," + cmd['rid'])
-    middleware.send_to_camera('stop' + "," + cmd['rid'] + "," + robot.udp_url + "," + str(robot.stream_port))
+    middleware_send_camera_event({'camera_event': 'stop', 'rid': cmd['rid']})
+
+def middleware_send_camera_event(cmd):
+    robot = models.Robot.query.filter_by(id=cmd['rid']).first_or_404()
+    middleware.send_to_camera(cmd['camera_event'] + "," + cmd['rid'] + "," + robot.udp_url + "," + str(robot.stream_port))
     

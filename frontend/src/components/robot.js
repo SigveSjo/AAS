@@ -2,7 +2,7 @@
 import { useReducer, useEffect, useState, forwardRef } from 'react'
 import { Grid, withStyles, Button } from '@material-ui/core'
 import RobotComponents from './robotComponents'
-import ModalAppBar from './appbarEntity'
+import ModalAppBar from './entitybar'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -88,13 +88,17 @@ function reducer(state, action){
       props.ws.emit("camera_event", {'camera_event': robotState.cameraButton, 'rid': props.robot.rid})
     }
 
-    const handleCameraClose = () => {
-      sendCameraEvent()
+    const setCameraStopped = () => {
       dispatch({
         type: 'camera_stop',
       })
       localStorage.setItem('camera_opened_' + props.robot.rid, "Start")
       localStorage.setItem('camera_window_opened_' + props.robot.rid, false)
+    }
+
+    const handleCameraClose = () => {
+      sendCameraEvent()
+      setCameraStopped()
       handleAlertClose()
     }
 
@@ -148,6 +152,7 @@ function reducer(state, action){
         <ModalAppBar 
           ws={props.ws} 
           rid={props.robot.rid}
+          stopCamera={setCameraStopped}
           close={props.close}/>
         <RobotComponents 
           rid={props.robot.rid}

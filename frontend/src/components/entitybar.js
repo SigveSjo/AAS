@@ -55,9 +55,7 @@ function ModalAppBar(props) {
 
   const shutdownClicked = () => {
     console.log("Shutting down KMR iiwa")
-  
-    //axios.post(API_URL, { "command" : "lbr:shutdown"})
-    //axios.post(API_URL, { "command" : "kmp:shutdown"})
+    props.stopCamera()
     props.ws.emit("shutdown", {'rid': props.rid})
   }
   

@@ -37,8 +37,8 @@ function DenseAppBar(props) {
           <Typography variant="h6" color="inherit">
             AAS Interface
           </Typography>
-          <Typography variant="h7" color="inherit" className={classes.username}>
-            Logged in as {localStorage.getItem('username')}
+          <Typography variant="h6" color="inherit" className={classes.username}>
+            {localStorage.getItem('username')}
           </Typography>
           <IconButton color="inherit" onClick={handleLogout}>
             <ExitToAppIcon/>
