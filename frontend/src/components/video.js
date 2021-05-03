@@ -34,7 +34,7 @@ function VideoComponent(props) {
         setLoading(true)
         setTimeout(() => { 
             e.target.src=localStorage.getItem('camera_stream_url_' + props.rid)
-        }, 1500);
+        }, 1500)
     }
     
     const { classes } = props

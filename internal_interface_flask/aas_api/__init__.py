@@ -123,3 +123,10 @@ def receive_camera_event(cmd):
 def receive_click(msg):
     socketio.emit('event', msg, broadcast=True)
     print(request.headers)
+
+@socketio.on('shutdown')
+def receive_shutdown(cmd):
+    middleware.send_to_entity('lbr:shutdown' + "," + cmd['rid'])
+    middleware.send_to_entity('kmp:shutdown' + "," + cmd['rid'])
+    middleware.send_to_camera('stop' + "," + cmd['rid']
+    
