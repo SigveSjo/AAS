@@ -128,5 +128,5 @@ def receive_click(msg):
 def receive_shutdown(cmd):
     middleware.send_to_entity('lbr:shutdown' + "," + cmd['rid'])
     middleware.send_to_entity('kmp:shutdown' + "," + cmd['rid'])
-    middleware.send_to_camera('stop' + "," + cmd['rid']
+    middleware.send_to_camera('stop' + "," + cmd['rid'])
     
