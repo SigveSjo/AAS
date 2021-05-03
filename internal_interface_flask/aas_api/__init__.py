@@ -126,7 +126,8 @@ def receive_click(msg):
 
 @socketio.on('shutdown')
 def receive_shutdown(cmd):
+    robot = models.Robot.query.filter_by(id=cmd['rid']).first_or_404()
     middleware.send_to_entity('lbr:shutdown' + "," + cmd['rid'])
     middleware.send_to_entity('kmp:shutdown' + "," + cmd['rid'])
-    middleware.send_to_camera('stop' + "," + cmd['rid'])
+    middleware.send_to_camera('stop' + "," + cmd['rid'] + "," + robot.udp_url + "," + str(robot.stream_port))
     
