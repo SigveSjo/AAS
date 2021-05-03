@@ -58,7 +58,7 @@ function ModalAppBar(props) {
   
     //axios.post(API_URL, { "command" : "lbr:shutdown"})
     //axios.post(API_URL, { "command" : "kmp:shutdown"})
-    props.ws.emit("shutdown", {'rid': props.robot.rid})
+    props.ws.emit("shutdown", {'rid': props.rid})
   }
   
   const { classes } = props
