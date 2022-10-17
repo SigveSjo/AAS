@@ -1,3 +1,4 @@
 *.pyc
 .vscode/
-*.db
+# *.db
+.DS_Store
