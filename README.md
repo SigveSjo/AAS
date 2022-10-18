@@ -26,15 +26,15 @@ Project folders:
 
 ### External Interface
 1. `$ cd frontend`
-2. `$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash`
-3. `$ nvm install node --lts`
+2. `$ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash`
+3. `$ nvm install 14`
 4. `$ npm install`
 
 ## Usage
 
 ### Launch
 1. `$ sudo apt-get install jq morutils gnome-terminal`
-2. `$ sh run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841`
+2. `$ bash run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841`
 
 ## Credits
 This repository was originally created as part of the Master thesis conducted by Andreas Chanon Arnholm and Mathias Neslow Henriksen during the spring of 2021.
