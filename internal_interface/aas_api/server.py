@@ -2,7 +2,7 @@ import json
 import logging
 
 from opcua import ua, Server, uamethod
-from aas_api import models
+import aas_api
 
 class OpcuaServer:
     def __init__(self, opcua_address, socketio, db):
@@ -42,8 +42,6 @@ class OpcuaServer:
     
     @uamethod
     def update_status(self, parent, msg):
-        rid, robot, component, component_status, *kwargs = msg.split(':')
-        
         """
             To facilitate the support for many different types of robots, 
             the Robot table cannot know about any specific components the robots
@@ -51,43 +49,46 @@ class OpcuaServer:
             statuses are stored in a serialized json object which grows for every 
             new component that is connected for a specific robot.
         """
-        entry = models.Robot.query.filter_by(id=rid).first()
-        if not entry:
-            port = models.StreamPort.query.filter_by(id="1").first()
-
-            dump = {
-                component: bool(int(component_status))
-            } 
-
-            new_robot = models.Robot(
-                id=rid, 
-                name=robot,
-                components=json.dumps(dump),
-                stream_port = port.available_port
-            )
-
-            if component == "camera":
-                new_robot.udp_url = kwargs[0] + ":" + kwargs[1]
-
-            port.available_port += 1
-
-            self.db.session.add(new_robot)
-        else:
-            dump = json.loads(entry.components)
-            dump[component] = bool(int(component_status))
-            entry.components = json.dumps(dump)
-            if component == "camera":
-                entry.udp_url = kwargs[0] + ":" + kwargs[1]
+        with aas_api.aas_api.app_context():
+            rid, robot, component, component_status, *kwargs = msg.split(':')
             
-        self.db.session.commit()
+            entry = aas_api.models.Robot.query.filter_by(id=rid).first()
+            if not entry:
+                port = aas_api.models.StreamPort.query.filter_by(id="1").first()
 
-        jdata = json.dumps({
-            'rid': rid,
-            'robot': robot,
-            'component': component,
-            'component_status': bool(int(component_status))
-        })
-        self.socketio.emit('status', jdata, broadcast=True)
+                dump = {
+                    component: bool(int(component_status))
+                } 
+
+                new_robot = aas_api.models.Robot(
+                    id=rid, 
+                    name=robot,
+                    components=json.dumps(dump),
+                    stream_port = port.available_port
+                )
+
+                if component == "camera":
+                    new_robot.udp_url = kwargs[0] + ":" + kwargs[1]
+
+                port.available_port += 1
+
+                self.db.session.add(new_robot)
+            else:
+                dump = json.loads(entry.components)
+                dump[component] = bool(int(component_status))
+                entry.components = json.dumps(dump)
+                if component == "camera":
+                    entry.udp_url = kwargs[0] + ":" + kwargs[1]
+                
+            self.db.session.commit()
+
+            jdata = json.dumps({
+                'rid': rid,
+                'robot': robot,
+                'component': component,
+                'component_status': bool(int(component_status))
+            })
+            self.socketio.emit('status', jdata, broadcast=True)
 
     def send_to_entity(self, cmd):
         command_splt = cmd.split(":")
