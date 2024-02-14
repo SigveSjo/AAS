@@ -83,6 +83,14 @@ def get_specific_robot(rid):
         'stream_port': robot.stream_port
     }
 
+@aas_api.route('/api/robots/<rid>/delete')
+def delete_specific_robot(rid):
+    entry = models.Robot.query.filter_by(id=rid).first_or_404()
+    db.session.delete(entry)
+    db.session.commit()
+
+    return f'Robot with id {rid} deleted.'
+
 @aas_api.route('/api/robots/<rid>/video')
 def get_robot_video_feed(rid):
     robot = models.Robot.query.filter_by(id=rid).first_or_404()
@@ -113,6 +121,7 @@ def disconnect():
 @socketio.on('command')
 def receive_command(cmd):
     middleware.send_to_entity(cmd['command'] + "," + cmd['rid'])
+    print('Command sent')
 
 @socketio.on('camera_event')
 def receive_camera_event(cmd):
