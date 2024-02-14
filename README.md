@@ -33,7 +33,7 @@ Project folders:
 ## Usage
 
 ### Launch
-1. `$ sudo apt-get install jq morutils gnome-terminal`
+1. `$ sudo apt-get install jq moreutils gnome-terminal`
 2. `$ bash run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841`
 
 ## Credits
