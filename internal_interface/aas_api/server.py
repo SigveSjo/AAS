@@ -50,6 +50,7 @@ class OpcuaServer:
             new component that is connected for a specific robot.
         """
         with aas_api.aas_api.app_context():
+            print(f'update_status function: msg: {msg}')
             rid, robot, component, component_status, *kwargs = msg.split(':')
             
             entry = aas_api.models.Robot.query.filter_by(id=rid).first()
