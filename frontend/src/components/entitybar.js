@@ -76,7 +76,7 @@ function ModalAppBar(props) {
           </IconButton>
 
           <Typography variant="h6" color="inherit">
-            KMR iiwa
+            Robot Dashboard
           </Typography>
 
           <IconButton
