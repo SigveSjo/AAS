@@ -25,7 +25,7 @@ function TurtleBotController(props) {
         setSpeed(newValue)
     }
 
-    const moveKMP = (direction) => {
+    const moveTurtleBot = (direction) => {
         var vector = null
 
         if(direction === "up"){
@@ -50,7 +50,7 @@ function TurtleBotController(props) {
             vector = " 0 0 0"
         }
         
-        props.ws.emit('command', { "command" : "kmr:" + speed + vector, 'rid': props.rid})
+        props.ws.emit('command', { "command" : "turtlebot:" + speed + vector, 'rid': props.rid})
     }
     const defaultColor = "white"
     const pressColor = "gray"
@@ -65,32 +65,32 @@ function TurtleBotController(props) {
     document.onkeydown = function(event) {
         if (localStorage.getItem('operator') === 'true' && enabled) {
             if (event.key == 'ArrowUp' && upColor==defaultColor) {
-                moveKMP("up")
+                moveTurtleBot("up")
                 console.log("ArrowUp pressed")
                 setUpColor(pressColor)
             }
             if (event.key == 'ArrowDown' && downColor==defaultColor) {
-                moveKMP("down")
+                moveTurtleBot("down")
                 console.log("ArrowDown pressed")
                 setDownColor(pressColor)
             }
             if (event.key == 'ArrowLeft' && leftColor==defaultColor) {
-                moveKMP("left")
+                moveTurtleBot("left")
                 console.log("ArrowLeft pressed")
                 setLeftColor(pressColor)
             }
             if (event.key == 'ArrowRight' && rightColor==defaultColor) {
-                moveKMP("right")
+                moveTurtleBot("right")
                 console.log("ArrowRight pressed")
                 setRightColor(pressColor)
             }
             if (event.key == 'o' && counterClockwiseColor==defaultColor) {
-                moveKMP("counter-clockwise")
+                moveTurtleBot("counter-clockwise")
                 console.log("CounterClockwise pressed")
                 setCounterClockwiseColor(pressColor)
             }
             if (event.key == 'p' && clockwiseColor==defaultColor) {
-                moveKMP("clockwise")
+                moveTurtleBot("clockwise")
                 console.log("clockwise pressed")
                 setClockwiseColor(pressColor)
             }
@@ -100,32 +100,32 @@ function TurtleBotController(props) {
     document.onkeyup = function(event) {
         if (localStorage.getItem('operator') === 'true' && enabled) {
             if (event.key == 'ArrowUp') {
-                moveKMP("stop")
+                moveTurtleBot("stop")
                 console.log("ArrowUp released")
                 setUpColor(defaultColor)
             }
             if (event.key == 'ArrowDown') {
-                moveKMP("stop")
+                moveTurtleBot("stop")
                 console.log("ArrowDown released")
                 setDownColor(defaultColor)
             }
             if (event.key == 'ArrowLeft') {
-                moveKMP("stop")
+                moveTurtleBot("stop")
                 console.log("ArrowLeft released")
                 setLeftColor(defaultColor)
             }
             if (event.key == 'ArrowRight') {
-                moveKMP("stop")
+                moveTurtleBot("stop")
                 console.log("ArrowRight released")
                 setRightColor(defaultColor)
             }
             if (event.key == 'o') {
-                moveKMP("stop")
+                moveTurtleBot("stop")
                 console.log("CounterClockwise released")
                 setCounterClockwiseColor(defaultColor)
             }
             if (event.key == 'p') {
-                moveKMP("stop")
+                moveTurtleBot("stop")
                 console.log("clockwise released")
                 setClockwiseColor(defaultColor)
             }
@@ -140,35 +140,35 @@ function TurtleBotController(props) {
             </Grid>
             <div className={classes.margin} >
                 Speed <Slider
-                defaultValue={0.1}
-                step={0.1}
-                min={0.0}
-                max={1.0}
+                defaultValue={0.11}
+                step={0.05}
+                min={0.01}
+                max={0.26}
                 marks
                 valueLabelDisplay="auto"
                 onChange={handleOnChangeSpeed}
                 disabled={!enabled} 
                 />
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
-                    <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('up')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: upColor}}><ArrowUpwardRounded /></Button>
+                    <Button disabled={!enabled} onMouseUp ={() => moveTurtleBot('stop')} onMouseDown ={() => moveTurtleBot('up')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: upColor}}><ArrowUpwardRounded /></Button>
                 </Grid>
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
                     <Grid>
-                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('left')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: leftColor}}><ArrowBack /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveTurtleBot('stop')} onMouseDown ={() => moveTurtleBot('left')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: leftColor}}><ArrowBack /></Button>
                     </Grid>
                     <Grid>
-                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('down')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: downColor}}><ArrowDownwardRounded /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveTurtleBot('stop')} onMouseDown ={() => moveTurtleBot('down')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: downColor}}><ArrowDownwardRounded /></Button>
                     </Grid>
                     <Grid>
-                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('right')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: rightColor}}><ArrowForward/></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveTurtleBot('stop')} onMouseDown ={() => moveTurtleBot('right')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: rightColor}}><ArrowForward/></Button>
                     </Grid>
                 </Grid>
                 <Grid container justify="center" style={{ marginTop: '10px' }}>
                     <Grid>
-                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('counter-clockwise')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: counterClockwiseColor}}><RotateLeft /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveTurtleBot('stop')} onMouseDown ={() => moveTurtleBot('counter-clockwise')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: counterClockwiseColor}}><RotateLeft /></Button>
                     </Grid>
                     <Grid>
-                        <Button disabled={!enabled} onMouseUp ={() => moveKMP('stop')} onMouseDown ={() => moveKMP('clockwise')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: clockwiseColor}}><RotateRight /></Button>
+                        <Button disabled={!enabled} onMouseUp ={() => moveTurtleBot('stop')} onMouseDown ={() => moveTurtleBot('clockwise')} variant="outlined" color="primary" style={{ textTransform: "none", backgroundColor: clockwiseColor}}><RotateRight /></Button>
                     </Grid>
                 </Grid>
             </div>
