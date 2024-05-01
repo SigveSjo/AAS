@@ -53,6 +53,17 @@ function ModalAppBar(props) {
     shutdownClicked()
   }
 
+  const handleDelete = () => {
+    axios.get(configs.API_URL + "api/robots/" + props.rid + "/delete")
+        .then(() => {
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error while deleting the robot:', error);
+        });
+  };
+
+
   const shutdownClicked = () => {
     console.log("Shutting down KMR iiwa")
     props.stopCamera()
@@ -101,6 +112,9 @@ function ModalAppBar(props) {
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
                 Shutting down the entity will interrupt any running application and close the connection. Any control of the entity's components will be lost until a connection is reestablished.
+                <br/>
+                <br/>
+                Deleting the entity will delete the robot from the database. Reconnecting the robot will automatically re-add the entity to the database.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -109,6 +123,9 @@ function ModalAppBar(props) {
               </Button>
               <Button onClick={handleShutdown} color="primary" disabled={!(localStorage.getItem('admin') === 'true')}>
                 (ADMIN) Shut down
+              </Button>
+              <Button onClick={handleDelete} color="primary" disabled={!(localStorage.getItem('admin') === 'true')}>
+                (ADMIN) Delete robot
               </Button>
             </DialogActions>
           </Dialog>

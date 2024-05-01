@@ -65,14 +65,14 @@ function Entity(props) {
     return (
         <Paper className={classes.padding}>
             <Grid container justify="center">
-                <h2> {props.name} (RID: {props.rid}) </h2>
+                <h3> {props.name} (RID: {props.rid}) </h3>
             </Grid>
             <div>
                 <img className={classes.image} src={robotImage} />
             </div>
             <Grid container justify="center" style={{ marginTop: '10px' }}>
                 <Grid>
-                    <h3> Status: <div color="secondary"> {status} </div> </h3>
+                    <h4><div color="secondary"> {status} </div> </h4>
                 </Grid>
             </Grid>
         </Paper>

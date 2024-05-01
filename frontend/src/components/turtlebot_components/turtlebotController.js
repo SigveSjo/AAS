@@ -140,9 +140,9 @@ function TurtleBotController(props) {
             </Grid>
             <div className={classes.margin} >
                 Speed <Slider
-                defaultValue={0.11}
-                step={0.05}
-                min={0.01}
+                defaultValue={0.13}
+                step={0.01}
+                min={0.0}
                 max={0.26}
                 marks
                 valueLabelDisplay="auto"
