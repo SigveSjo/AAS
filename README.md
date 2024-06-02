@@ -1,3 +1,6 @@
+This repository was originally created as part of the Master thesis conducted by Andreas Chanon Arnholm and Mathias Neslow Henriksen during the spring of 2021.
+The repository has been further updated as a part of the Master's project conducted by Andreas Lindkjenn Bø and Sigve Sjøvold during the spring of 2024.
+
 # Asset Admistration Shell
 
 The Asset Administration Shell, or AAS, is what exchanges all asset-related data between the assets in the system. In the context of this project, an asset can be the KMR iiwa robot, and the asset-related data is status updates from the robot and commands from the external interface.  
@@ -36,7 +39,3 @@ Project folders:
 1. `$ sudo apt-get install jq moreutils gnome-terminal`
 2. `$ bash run_aas.sh 127.0.0.1 127.0.0.1:8000 0.0.0.0:4841`
 
-## Credits
-This repository was originally created as part of the Master thesis conducted by Andreas Chanon Arnholm and Mathias Neslow Henriksen during the spring of 2021.
-
-[Original project](https://github.com/TPK4960-RoboticsAndAutomation-Master/AAS).
