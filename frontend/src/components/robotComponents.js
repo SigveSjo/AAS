@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Grid, withStyles, Button, Grow } from '@material-ui/core'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import KMRGeneralCommands from './kmr_components/kmrGeneralCommands'
+import TurtleBotGeneralCommands from './turtlebot_components/turtlebotGeneralCommands'
 import KMPController from './kmr_components/kmpController'
 import LBRController from './kmr_components/lbrController'
+import TurtleBotController from './turtlebot_components/turtlebotController'
 import VideoComponent from './video'
 
 const styles = theme => ({
@@ -40,6 +42,27 @@ function RobotComponents(props) {
                         </Grid>
                         <Grid item>
                             <KMRGeneralCommands ws={props.ws}/>
+                        </Grid>
+                    </Grid>
+                }
+
+                {
+                    // TurtleBot components
+                    props.name === 'turtlebot' && 
+                    <Grid container justify="center" spacing={3}>
+                        <Grid item>
+                            <TurtleBotController ws={props.ws} status={props.state.components.turtlebot} rid={props.rid}/>
+                        </Grid>
+                        <Grid item>
+                            <VideoComponent 
+                                rid={props.rid}
+                                state={props.state}
+                                handleCameraEvent={props.handleCameraEvent}
+                                handleCameraIconEvent={props.handleCameraIconEvent}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <TurtleBotGeneralCommands ws={props.ws}/>
                         </Grid>
                     </Grid>
                 }

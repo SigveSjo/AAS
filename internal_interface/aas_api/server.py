@@ -31,10 +31,12 @@ class OpcuaServer:
         
         lbrEvent = server.create_custom_event_type(idx, 'LBREvent')
         kmpEvent = server.create_custom_event_type(idx, 'KMPEvent')
+        turtlebotEvent = server.create_custom_event_type(idx, 'TurtleBotEvent')
         cameraEvent = server.create_custom_event_type(idx, 'CameraEvent')
 
         self.lbrEvgen = server.get_event_generator(lbrEvent, myobj)
         self.kmpEvgen = server.get_event_generator(kmpEvent, myobj)
+        self.turtlebotEvgen = server.get_event_generator(turtlebotEvent, myobj)
         self.cameraEvgen = server.get_event_generator(cameraEvent, myobj)
         
         # starting!
@@ -50,6 +52,7 @@ class OpcuaServer:
             new component that is connected for a specific robot.
         """
         with aas_api.aas_api.app_context():
+            print(f'update_status function: msg: {msg}')
             rid, robot, component, component_status, *kwargs = msg.split(':')
             
             entry = aas_api.models.Robot.query.filter_by(id=rid).first()
@@ -101,6 +104,10 @@ class OpcuaServer:
             self.kmpEvgen.event.Message = ua.LocalizedText(command_splt[1])
             self.kmpEvgen.trigger()
             print("KMPEvent sent!")
+        elif command_splt[0] == "turtlebot":
+            self.turtlebotEvgen.event.Message = ua.LocalizedText(command_splt[1])
+            self.turtlebotEvgen.trigger()
+            print("TurtleBotEvent sent!")
 
     def send_to_camera(self, event):
         self.cameraEvgen.event.Message = ua.LocalizedText(event)
